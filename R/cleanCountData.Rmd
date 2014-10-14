@@ -1,0 +1,118 @@
+#Clean Up count data set
+
+Read in data
+```{r}
+countData <- read.csv("../data/dcLCMsam2countsResults.csv")
+head(countData)
+```
+
+
+regex: keep only values between  between "KZNRS018_"  "_"
+
+```{r}
+####Test to see if it works
+#test <- "KZNRS018_E7_GCGCATT_L002_R1_001.sam.gz"
+
+## ^ = from the brigining, [^_] = anything but underscore, +_ = one or more underscores, () captures [^_]+, _.+$ = underscore and everything util the end of line.
+
+pattern = "^[^_]+_([^_]+)_.+$"
+
+#gsub(pattern = pattern,
+     #replacement = "\\1", 
+     #x = test)
+
+#Auctual Sub
+
+names(countData) <-  gsub(pattern = pattern, 
+     replacement = "\\1",
+     names(countData))
+
+head(countData)
+```
+
+There are multiple instances of the same library because there were multiple fasta files that came from Berkeley and were processed seperatly.  I just need to combine them to get the true read count. 
+
+Get the sum of all columns with the same name.  This is a really horrible way to do this.  If I had more time I would 
+
+#make list of all unique column names
+#grep that name, grep("A2", names(countData))
+#add those columns together to a new name and data frame
+
+But I don't, at least it is reproducible fast. 
+
+```{r}
+countData.2<- data.frame(countData$gene)
+countData.2$A2 <- countData[,2] + countData[,3] + countData[,4]
+countData.2$A3 <- countData[,5] + countData[,6] 
+countData.2$A4 <- countData[,7] + countData[,8] + countData[,9]
+countData.2$A5 <- countData[,10] + countData[,11] + countData[,12]
+countData.2$A6 <- countData[,13] + countData[,14] + countData[,15]
+countData.2$A7 <- countData[,16] + countData[,17] + countData[,18]
+countData.2$A8 <- countData[,19] + countData[,20] 
+
+countData.2$B1 <- countData[,21] + countData[,22] + countData[,23]
+countData.2$B2 <- countData[,24] + countData[,25] + countData[,26]
+countData.2$B3 <- countData[,27] + countData[,28] + countData[,29]
+countData.2$B4 <- countData[,30] + countData[,31] 
+countData.2$B5 <- countData[,32] + countData[,33] + countData[,34]
+countData.2$B6 <- countData[,35] + countData[,36] 
+countData.2$B7 <- countData[,37] + countData[,38] 
+countData.2$B8 <- countData[,39] + countData[,40] + countData[,41]
+
+countData.2$C1 <- countData[,42] + countData[,43] 
+countData.2$C2 <- countData[,44] + countData[,45] + countData[,46]
+countData.2$C3 <- countData[,47] + countData[,48] + countData[,49]
+countData.2$C4 <- countData[,50] + countData[,51] + countData[,52]
+countData.2$C5 <- countData[,53] + countData[,54] 
+countData.2$C6 <- countData[,55] + countData[,56] + countData[,57]
+countData.2$C7 <- countData[,58] + countData[,59] + countData[,60]
+countData.2$C8 <- countData[,61] + countData[,62] + countData[,63]
+
+countData.2$D1 <- countData[,64] + countData[,65] + countData[,66]
+countData.2$D2 <- countData[,67] + countData[,68] + countData[,69]
+countData.2$D3 <- countData[,70] + countData[,71] + countData[,72]
+countData.2$D4 <- countData[,73] + countData[,74] + countData[,75]
+countData.2$D5 <- countData[,76] + countData[,77] + countData[,78]
+countData.2$D6 <- countData[,79] + countData[,80] 
+countData.2$D7 <- countData[,81] + countData[,82] + countData[,83] 
+countData.2$D8 <- countData[,84] + countData[,85] + countData[,86]
+
+countData.2$E1 <- countData[,87] + countData[,88] + countData[,89]
+countData.2$E2 <- countData[,90] + countData[,91] + countData[,92]
+countData.2$E3 <- countData[,93] + countData[,94] + countData[,95]
+countData.2$E4 <- countData[,96] + countData[,97] + countData[,98]
+countData.2$E5 <- countData[,99] + countData[,100] + countData[,101]
+countData.2$E6 <- countData[,102] + countData[,103] 
+countData.2$E7 <- countData[,105] + countData[,106] + countData[,107] 
+countData.2$E8 <- countData[,108] + countData[,109] + countData[,110]
+
+countData.2$F1 <- countData[,111] + countData[,112] 
+countData.2$F2 <- countData[,113] + countData[,114] + countData[,115]
+countData.2$F3 <- countData[,116] + countData[,117] + countData[,118]
+countData.2$F4 <- countData[,119] + countData[,120] + countData[,121]
+countData.2$F5 <- countData[,122] + countData[,123] + countData[,124]
+countData.2$F6 <- countData[,125] + countData[,126] + countData[,127]
+countData.2$F7 <- countData[,128] + countData[,129] + countData[,130] 
+
+head(countData.2)
+```
+
+Now I have to rename the  columns based on the library samples.
+
+```{r}
+sampleNames <- read.csv("../data/librarySamples.csv")
+head(sampleNames)
+```
+
+I need to loop over names(countData.2), grep sampleNames[,1], returns row?, and replace with corresponding sampleNames[row,2]. Take it one step at a time. This is so frustrating, but it is really something I need to learn. Duh.  
+
+```{r}
+for (x in names(countData.2)[2]) {
+  sample <- grep(x, sampleNames[,1])
+  sampleNames[sample,2])
+}
+
+#Now all I need to do is modify so it is in a list. 
+```
+
+
