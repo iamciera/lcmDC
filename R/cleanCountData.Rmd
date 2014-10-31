@@ -17,10 +17,6 @@ regex: keep only values between  between "KZNRS018_"  "_"
 
 pattern = "^[^_]+_([^_]+)_.+$"
 
-#gsub(pattern = pattern,
-     #replacement = "\\1", 
-     #x = test)
-
 #Auctual Sub
 
 names(countData) <-  gsub(pattern = pattern, 
@@ -38,7 +34,7 @@ Get the sum of all columns with the same name.  This is a really horrible way to
 #grep that name, grep("A2", names(countData))
 #add those columns together to a new name and data frame
 
-But I don't, at least it is reproducible fast. 
+But I don't have a lot of time, at least it is reproducible. 
 
 ```{r}
 countData.2<- data.frame(countData$gene)
@@ -101,18 +97,34 @@ Now I have to rename the  columns based on the library samples.
 
 ```{r}
 sampleNames <- read.csv("../data/librarySamples.csv")
-head(sampleNames)
+sampleNames
 ```
 
-I need to loop over names(countData.2), grep sampleNames[,1], returns row?, and replace with corresponding sampleNames[row,2]. Take it one step at a time. This is so frustrating, but it is really something I need to learn. Duh.  
+I need to loop over names(countData.2), grep sampleNames[,1], returns row #, and replace with corresponding sampleNames[row,2]. 
 
 ```{r}
-for (x in names(countData.2)[2]) {
-  sample <- grep(x, sampleNames[,1])
-  sampleNames[sample,2])
+#make a new dataset 
+countData.3 <- countData.2
+
+#Loop to find the name and replace with corresponding library code
+for (x in names(countData.3)[2:47]) {
+  sample <- grep(x, sampleNames[,1]) #find first sample in column names
+  colName <- sampleNames[sample,2] #extract corresponding library 
+  names(countData.3) <- gsub(x, colName, names(countData.3)) #replace
 }
 
-#Now all I need to do is modify so it is in a list. 
+#I double checked the first six. 
 ```
 
+Now I am ready for RNAseq and GO enrichment. Talk with Neelima and Brad about the samples and the work that needs to be done. 
+
+```{r}
+#read out cleaned data
+head(countData.3)
+
+countData.4 <- countData.3[,-1]
+names(countData.4)
+rownames(countData.4) <- countData.3[,1]
+
+write.table(countData.4, "../data/countData4.txt")
 

@@ -1,0 +1,273 @@
+#Analysis 2 - Top 25% of coefficient of variation small SOM, seperated by region
+
+Purpose:
+
+In this analysis I am checking to see if using the top 25% of genes based on co-efficient of variation using SOM clustering.  Since the clustering may be confounded between SAM and leaf tissue being forced into same cluster, as done in analysis 1, this analysis will perform clustering seperately. See `dclcmSOM_analysis2_102814.Rmd`.  
+
+Results:
+
+I subsetted based if the tissue was part of the SAM or leaf.  I performed the analysis on just the SAM tissue.  The PCA1 by PCA2 figure clustered along the rim.  Not sure what that means.  When I tried to cluster them together I found that they were being disappropriatly clustering.  Not sure why?  Clusters are too similar?  When looking at the clusters, it appears as though none of the genes even have the same expression.  This is not going to work.  Do SOMs need more than just 5 groups to cluster by?
+
+
+Required Libraries
+```{r}
+library(ggplot2)
+library(reshape2)
+library(kohonen)
+```
+
+Cluster visualization functions 
+
+```{r}
+#ClusterVis
+clusterVis <- function(clustNum){
+  
+  sub_cluster <- subset(plot.data, som$unit.classif==clustNum)
+  sub_data <- sub_cluster[,c(1:11)] # just the sample types
+  m.data <- melt(sub_data) 
+  p <- ggplot(m.data, aes(x=variable, y=value))
+  p + geom_point(alpha=0.5,position="jitter", size=1) + 
+    geom_boxplot(alpha=0.75, outlier.size=0) + 
+    theme_bw() + 
+    theme(text = element_text(size=30),
+          axis.text.x = element_text(angle=90, 
+                                     vjust=1)) +
+    xlab("Library") +
+    ylab("Scaled Gene Expression")
+}
+```
+
+###clusterVis_line
+
+Need to remove unused x-axis values. 
+
+```{r, eval=FALSE}
+clusterVis_line <- function(clustNum) {
+  sub_cluster <- subset(plot.data, som$unit.classif==clustNum)
+  sub_data <- sub_cluster[,c(1:11)] # just the sample types
+  m.data <- melt(sub_data)
+  m.data$region <- ifelse(grepl("SAM", m.data$variable, ignore.case = T), "SAM", 
+                          ifelse(grepl("leaf", m.data$variable, ignore.case = T), "leaf", "other"))
+  head(m.data)
+  m.data <- within(m.data, lineGroup <- paste(gene,sep='.'))
+  ggplot(m.data, aes(variable, value, group = lineGroup)) + 
+    geom_line(alpha = .1) + 
+    geom_point(alpha = .0) +
+    theme_bw() +
+    facet_grid(.~region) +
+    theme(axis.text.x = element_text(size=20, 
+                                angle=90, 
+                                vjust=1))
+  }
+
+```
+
+##clusterVis_region 
+
+not finished. 
+```{r}
+clusterVis_region <- function(clustNum){
+  sub_cluster <- subset(plot.data, som$unit.classif==1)
+  sub_data <- sub_cluster[,c(1:11)] # just the sample types
+  m.data <- melt(sub_data)
+  m.data$region <- ifelse(grepl("SAM", m.data$variable, ignore.case = T), "SAM", 
+                          ifelse(grepl("leaf", m.data$variable, ignore.case = T), "leaf", "other"))
+
+  m.data$stage <- ifelse(grepl("a1", m.data$variable, ignore.case = T), "1", 
+                          ifelse(grepl("b2", m.data$variable, ignore.case = T), "2", 
+                            ifelse(grepl("c3", m.data$variable, ignore.case = T), "3", 
+                                ifelse(grepl("d4", m.data$variable, ignore.case = T), "4",
+                                  ifelse(grepl("e5", m.data$variable, ignore.case = T), "5", "other")
+                                  )
+                                )
+                             )
+                          )
+  
+  head(m.data)       
+  p <- ggplot(m.data, aes(y=value, x=variable, fill = stage))
+  p + geom_point(alpha=0.5,position="jitter", size=1) + 
+    geom_boxplot(alpha=0.70, outlier.size=0) +
+    scale_colour_manual(values = c("darkorchid1", "coral")) +
+    theme(legend.text = element_text(
+      size = 30, 
+      face = "bold"), 
+      text = element_text(size=40)) + 
+    theme_bw() + 
+    theme(text = element_text(size=30)) +
+    facet_grid(.~region) 
+}
+```
+
+##1. Get the co-efficient of variation
+
+```{r}
+countData <- read.csv("../data/normalized_count_file.csv")
+dim(countData)
+#Then sort
+#it adds numbers to them to make them unique but ignore
+countData1 <- countData[,order(names(countData))]
+countData1 <- subset(countData1, select=c(47,1:46))
+```
+
+```{r}
+#remove low count libraries (3rd.leaf.7, 2nd.SAM.4, 5th.leaf.3)
+dim(countData1)
+names(countData1)
+countData2 <- countData1[,-c(39,32,11)]
+names(countData2)
+dim(countData2)
+countData2$a1.leaf <- rowMeans(subset(countData2[10:11]))
+countData2$a1.SAM <- rowMeans(subset(countData2[12:15]))
+countData2$b2.leaf <- rowMeans(subset(countData2[24:27]))
+countData2$b2.SAM <- rowMeans(subset(countData2[28:30]))
+countData2$c3.leaf <- rowMeans(subset(countData2[31:36]))
+countData2$c3.SAM <- rowMeans(subset(countData2[37:44]))
+countData2$d4.leaf <- rowMeans(subset(countData2[16:19]))
+countData2$d4.SAM <- rowMeans(subset(countData2[20:23]))
+countData2$e5.leaf <- rowMeans(subset(countData2[2:5]))
+countData2$e5.SAM <- rowMeans(subset(countData2[6:10]))
+
+dim(countData2)
+names(countData2)
+ave <- subset(countData2[45:54])
+ave$sd <- apply(ave,1,function(d)sd(d))
+ave$average <- rowMeans(subset(ave[1:10]))
+ave$cv <- ave$sd / ave$average
+dim(ave)
+names(ave)
+
+countData <- cbind(countData, countData2[45:54])
+countData <- cbind(countData, ave[,11:13])
+
+names(countData)
+```
+
+```{r}
+quantile(countData$cv)
+countData[is.na(countData)] <- 0
+subCountData <- subset(countData, cv > 0.61264422)
+allGenes25 <- subCountData[,c(1,48:60)]
+colnames(allGenes25)[1]<-"gene"
+```
+
+###Subset by region
+
+```{r}
+
+  m.data <- melt(allGenes25)
+  m.data$region <- ifelse(grepl("SAM", m.data$variable, ignore.case = T), "SAM", 
+                          ifelse(grepl("leaf", m.data$variable, ignore.case = T), "leaf", "other"))
+  SAM.allGenes25<- subset(m.data, region == "SAM")
+  SAM.allGenes25 <- dcast(SAM.allGenes25, gene ~ variable)
+  head(SAM.allGenes25)
+```
+
+##2.pca - Small
+
+```{r}
+#write.csv(allGenes25, "../data/analysis4.top25.csv")
+
+scale_data <- as.matrix(t(scale(t(SAM.allGenes25[c(2:6)]))))
+scale_data[is.na(scale_data)] <- 0 #how did NAs get reintroduced?
+
+#Principle Component Analysis
+pca <- prcomp(scale_data, scale=TRUE) 
+
+summary(pca) 
+pca.scores <- data.frame(pca$x)
+
+SAM.allGenes25 <- cbind(SAM.allGenes25, scale_data, pca.scores) 
+head(SAM.allGenes25)
+```
+
+##Visualizing the PCA
+
+```{r}
+p <- ggplot(data.val.allGenes25, aes(PC1, PC2))
+p + geom_point()
+```
+
+#Self Organizing Map - (6,6) small
+
+```{r}
+data.val <- SAM.allGenes25
+som.data <- as.matrix(data.val[,c(2:6)])  #subset only the scaled gene expression values
+set.seed(2)
+som <- som(data=som.data, somgrid(3,2,"hexagonal")) # This is where you change the size of the map
+summary(som)
+```
+
+-----------------
+
+###Training Plot ("changes") 
+
+```{r}
+plot(som, type ="changes")
+```
+
+###Code Plot - small
+
+```{r}
+plot(som, type = "codes") 
+```
+
+###Count Plot - small
+
+```{r}
+plot(som, type = "counts")
+```
+
+###Distance Neighbour Plot - Small
+
+```{r}
+plot(som, type="dist.neighbours")
+```
+
+###Heatmaps - small
+
+```{r}
+head(som$codes)
+som$data <- data.frame(som$data) #changed to dataframe to extract column names easier. 
+
+#This is just a loop that plots the distribution of each tissue type across the map. 
+for (i in 1:10){
+  plot(som, type = "property", property = som$codes[,i], main=names(som$data)[i])
+  print(plot)
+  }
+```
+
+##Visualize by Cluster
+
+```{r}
+##Bring the datasets back together for cluster specific visualizations
+
+plot.data <- cbind(data.val[,c(1,15:34)],som$unit.classif,som$distances)
+names(plot.data)
+head(plot.data)
+```
+
+```{r}
+p <- ggplot(data.val, aes(PC1, PC2, colour=factor(som$unit.classif))) 
+p + geom_point() + theme_bw()
+```
+
+##Visualize by cluster
+
+```{r}
+clusterVis_line(1)
+clusterVis_line(2)
+clusterVis_line(3)
+clusterVis_line(4)
+clusterVis_line(5)
+clusterVis_line(6)
+clusterVis_line(7)
+clusterVis_line(8)
+clusterVis_line(9)
+clusterVis_line(10)
+clusterVis_line(11)
+clusterVis_line(12)
+clusterVis_line(13)
+clusterVis_line(14)
+clusterVis_line(15)
+#ect
+```

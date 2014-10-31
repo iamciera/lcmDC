@@ -1,0 +1,98 @@
+"","ITAG","SGN_annotation","AGI","gene_name"
+"1","Solyc00g013120.2.1",NA,NA,NA
+"2","Solyc00g013140.1.1","NADH dehydrogenase subunit 5 (Fragment) (AHRD V1 ***- A1XJP5_SIMCH); contains Interpro domain(s)  IPR003945  NADH-plastoquinone oxidoreductase, chain 5 ","ATMG00665","Mitochondrial NADH dehydrogenase subunit 5. The gene is trans-spliced from three different pre-cursors, NAD5a, NAD5b and NAD5c."
+"3","Solyc00g013160.1.1",NA,NA,NA
+"4","Solyc00g013170.1.1",NA,NA,NA
+"5","Solyc00g013190.1.1",NA,NA,NA
+"6","Solyc00g019960.1.1",NA,NA,NA
+"7","Solyc00g022110.2.1","Ribosomal protein L2 (AHRD V1 ***- Q5M9S7_TOBAC); contains Interpro domain(s)  IPR002171  Ribosomal protein L2 ","ATMG00560","encodes a mitochondrial ribosomal protein L2, a constituent of the large subunit of the ribosomal complex"
+"8","Solyc00g023600.1.1",NA,NA,NA
+"9","Solyc00g029190.2.1",NA,NA,NA
+"10","Solyc00g094540.1.1",NA,NA,NA
+"11","Solyc00g142160.1.1",NA,NA,NA
+"12","Solyc00g244290.1.1",NA,NA,NA
+"13","Solyc00g320430.1.1",NA,NA,NA
+"14","Solyc01g007080.2.1",NA,NA,NA
+"15","Solyc01g011090.2.1","Phospholipid-transporting ATPase (AHRD V1 ***- C5G6U4_AJEDR); contains Interpro domain(s)  IPR001757  ATPase, P-type, K/Mg/Cd/Cu/Zn/Na/Ca/Na/H-transporter ","AT1G59820","haloacid dehalogenase-like hydrolase family protein; Identical to Putative phospholipid-transporting ATPase 3 (EC 3.6.3.1) (Aminophospholipid flippase 3) (ALA3) [Arabidopsis Thaliana] (GB:Q9XIE6;GB:Q8RWQ3); similar to haloacid dehalogenase-like hydrolase family protein [Arabidopsis thaliana] (TAIR:AT1G68710.1); similar to haloacid dehalogenase-like hydrolase family protein [Arabidopsis thaliana] (TAIR:AT3G25610.1); similar to haloacid dehalogenase-like hydrolase family protein [Arabidopsis thaliana] (TAIR:AT1G13210.1); similar to putative Potential phospholipid-transporting ATPase 8 [Oryza sativa (japonica cultivar-group)] (GB:BAD37698.1); similar to Putative phospholipid-transporting ATPase 4 (Aminophospholipid flippase 4) (GB:Q9LNQ4); similar to putative ATPase, aminophospholipid transporter (APLT), class I, type 8A, member 1 [Oryza sativa (japonica cultivar-group)] (GB:BAD54494.1); contains InterPro domain Phospholipid-translocating P-type ATPase, flippase; (InterPro:IPR006539); contains InterPro domain ATPase, P-type, K/Mg/Cd/Cu/Zn/Na/Ca/Na/H-transporter; (InterPro:IPR001757)"
+"16","Solyc01g016870.1.1",NA,NA,NA
+"17","Solyc01g060090.1.1","Serine/threonine-protein phosphatase 4 regulatory subunit 3 (AHRD V1 **-- PP4R3_DANRE)","AT3G06670","binding / hydrogen ion transporting ATP synthase, rotational mechanism / hydrogen ion transporting ATPase, rotational mechanism; similar to hydrogen ion transporting ATP synthase, rotational mechanism / hydrogen ion transporting ATPase, rotational mechanism [Arabidopsis thaliana] (TAIR:AT5G49390.1); similar to unknown protein [Oryza sativa (japonica cultivar-group)] (GB:BAD53932.1); similar to Protein of unknown function DUF625 [Medicago truncatula] (GB:ABD32317.1); similar to Protein of unknown function DUF625 [Medicago truncatula] (GB:ABE83194.1); contains InterPro domain Armadillo-like helical; (InterPro:IPR011989); contains InterPro domain Protein of unknown function DUF625; (InterPro:IPR006887); contains InterPro domain ATPase, F1 complex, gamma subunit; (InterPro:IPR000131)"
+"18","Solyc01g080020.2.1",NA,NA,NA
+"19","Solyc01g095320.2.1",NA,NA,NA
+"20","Solyc01g105920.2.1",NA,NA,NA
+"21","Solyc01g111080.2.1",NA,NA,NA
+"22","Solyc02g036370.2.1",NA,NA,NA
+"23","Solyc02g062960.2.1","Homeobox-leucine zipper protein (AHRD V1 *-*- Q9FXN8_ZINEL); contains Interpro domain(s)  IPR001356  Homeobox ","AT2G18550","Encodes a homeodomain leucine zipper class I (HD-Zip I) protein."
+"24","Solyc02g063320.2.1","Armadillo/beta-catenin repeat family protein (AHRD V1 **-- D7L0H5_ARALY); contains Interpro domain(s)  IPR011989  Armadillo-like helical ","AT3G03440","armadillo/beta-catenin repeat family protein; similar to armadillo/beta-catenin repeat family protein [Arabidopsis thaliana] (TAIR:AT4G12710.1); similar to plakoglobin/armadillo/beta-catenin-like protein [Oryza sativa] (GB:AAQ13403.1); similar to Os01g0112500 [Oryza sativa (japonica cultivar-group)] (GB:NP_001041814.1); contains InterPro domain Armadillo; (InterPro:IPR000225); contains InterPro domain Armadillo-like helical; (InterPro:IPR011989)"
+"25","Solyc02g070930.1.1",NA,NA,NA
+"26","Solyc02g077770.2.1",NA,NA,NA
+"27","Solyc02g081550.2.1","ATP-dependent Zn protease cell division protein FtsH homolog (AHRD V1 **** B2XTF7_HETA2); contains Interpro domain(s)  IPR001315  Caspase Recruitment  IPR003960  ATPase, AAA-type, conserved site  IPR005936  Peptidase M41, FtsH  IPR006025  Peptidase M, neutral zinc metallopeptidases, zinc-binding site ","AT5G15250","Encodes an FtsH protease that is localized to the chloroplast. AtFtsH6 is involved in the degradation of both Lhcb3 and Lhcb1 during senescence and high-light acclimation."
+"28","Solyc02g083280.2.1",NA,NA,NA
+"29","Solyc02g089540.2.1","Tomato CONSTANS-like 1","AT5G15840","Encodes a protein showing similarities to zinc finger transcription factors, involved in regulation of flowering under long days. Acts upstream of FT and SOC1."
+"30","Solyc02g091070.2.1","Multidrug resistance protein mdtK (AHRD V1 *-*- MDTK_EDWI9); contains Interpro domain(s)  IPR015521  MATE family transporter related protein ","AT1G71140","MATE efflux family protein; similar to MATE efflux family protein [Arabidopsis thaliana] (TAIR:AT1G15170.1); similar to Multi antimicrobial extrusion protein MatE [Medicago truncatula] (GB:ABE93671.1); similar to Os01g0684900 [Oryza sativa (japonica cultivar-group)] (GB:NP_001043893.1); contains InterPro domain Multi antimicrobial extrusion protein MatE; (InterPro:IPR002528)"
+"31","Solyc03g006490.2.1","Aluminum-induced protein-like (AHRD V1 ***- Q9FG81_ARATH)","AT4G27450","similar to unknown protein [Arabidopsis thaliana] (TAIR:AT3G15450.1); similar to unknown [Glycine max] (GB:AAG00940.1); contains domain no description (G3D.3.60.20.10); contains domain N-terminal nucleophile aminohydrolases (Ntn hydrolases) (SSF56235)"
+"32","Solyc03g007300.1.1","50S ribosomal protein L16 (AHRD V1 -**- D5T7W1_LEGP2); contains Interpro domain(s)  IPR000114  Ribosomal protein L16 ","ATMG00080","encodes a mitochondrial ribosomal protein L16, which is a constituent of the large ribosomal subunit"
+"33","Solyc03g031890.2.1",NA,NA,NA
+"34","Solyc03g043910.2.1",NA,NA,NA
+"35","Solyc03g078090.2.1","Pectinesterase family protein (AHRD V1 ***- D7MRW1_ARALY); contains Interpro domain(s)  IPR000070  Pectinesterase, catalytic ","AT5G09760","pectinesterase family protein; similar to pectinesterase family protein [Arabidopsis thaliana] (TAIR:AT5G64640.1); similar to 52O08_4 [Brassica rapa subsp. pekinensis] (GB:AAZ67549.1); contains InterPro domain Virulence factor, pectin lyase fold; (InterPro:IPR011050); contains InterPro domain Plant invertase/pectin methylesterase inhibitor; (InterPro:IPR007186); contains InterPro domain Pectinesterase; (InterPro:IPR000070); contains InterPro domain Pectinesterase inhibitor; (InterPro:IPR006501)"
+"36","Solyc03g078490.2.1","UDP-glucuronosyltransferase (AHRD V1 **-* Q5UB81_ARATH); contains Interpro domain(s)  IPR002213  UDP-glucuronosyl/UDP-glucosyltransferase ","AT1G22340","UDP-glucoronosyl/UDP-glucosyl transferase family protein; similar to UDP-glucoronosyl/UDP-glucosyl transferase family protein [Arabidopsis thaliana] (TAIR:AT1G22360.1); similar to transcription factor/ transferase, transferring glycosyl groups [Arabidopsis thaliana] (TAIR:AT1G22380.1); similar to UGT85A1 (UDP-glucosyl transferase 85A1), UDP-glycosyltransferase/ transferase, transferring glycosyl groups / transferase, transferring hexosyl groups [Arabidopsis thaliana] (TAIR:AT1G22400.1); similar to glycosyltransferase NTGT5b [Nicotiana tabacum] (GB:BAD93690.1); contains InterPro domain UDP-glucuronosyl/UDP-glucosyltransferase; (InterPro:IPR002213)"
+"37","Solyc03g096060.1.1",NA,NA,NA
+"38","Solyc03g096650.1.1","Tropinone reductase II (AHRD V1 ***- Q6KF77_SOLTU); contains Interpro domain(s)  IPR002347  Glucose/ribitol dehydrogenase ","AT2G29170","short-chain dehydrogenase/reductase (SDR) family protein / tropinone reductase, putative; similar to tropinone reductase, putative / tropine dehydrogenase, putative [Arabidopsis thaliana] (TAIR:AT2G29150.1); similar to Tropinone reductase, putative, expressed [Oryza sativa (japonica cultivar-group)] (GB:ABF95188.1); similar to Tropinone reductase, putative, expressed [Oryza sativa (japonica cultivar-group)] (GB:ABF95189.1); similar to Tropinone reductase, putative, expressed [Oryza sativa (japonica cultivar-group)] (GB:ABF95190.1); contains InterPro domain Short-chain dehydrogenase/reductase SDR; (InterPro:IPR002198); contains InterPro domain Glucose/ribitol dehydrogenase; (InterPro:IPR002347)"
+"39","Solyc03g097930.2.1",NA,NA,NA
+"40","Solyc03g098320.2.1",NA,NA,NA
+"41","Solyc03g112680.1.1",NA,NA,NA
+"42","Solyc03g119910.2.1","Gibberellin 3-beta-hydroxylase (Fragment) (AHRD V1 **** D9ZZW4_9FABA); contains Interpro domain(s)  IPR005123  Oxoglutarate and iron-dependent oxygenase ","AT1G15550","Involved in later steps of the gibberellic acid biosynthetic pathway. Activated by AGAMOUS in a cal-1, ap1-1 background."
+"43","Solyc03g121090.2.1",NA,NA,NA
+"44","Solyc04g072020.2.1","Choline kinase (AHRD V1 **** Q9AVR9_PEA); contains Interpro domain(s)  IPR002573  Choline/ethanolamine kinase ","AT1G71697","Encodes choline kinase.  mRNA levels are increased in response to wounding."
+"45","Solyc04g081130.1.1","Glyoxal oxidase (AHRD V1 ***- B6TJK4_MAIZE); contains Interpro domain(s)  IPR009880  Glyoxal oxidase, N-terminal ","AT1G19900","glyoxal oxidase-related; similar to glyoxal oxidase-related [Arabidopsis thaliana] (TAIR:AT1G75620.1); similar to Os03g0258900 [Oryza sativa (japonica cultivar-group)] (GB:NP_001049609.1); similar to glyoxal oxidase [Vitis pseudoreticulata] (GB:ABA42922.1); contains InterPro domain Galactose oxidase, central; (InterPro:IPR011043); contains InterPro domain Glyoxal oxidase, N-terminal; (InterPro:IPR009880)"
+"46","Solyc05g007080.2.1","Pectate lyase family protein (AHRD V1 **** D7M6R5_ARALY); contains Interpro domain(s)  IPR002022  Pectate lyase/Amb allergen ","AT1G14420","AT59 (Arabidopsis homolog of tomato LAT59); lyase/ pectate lyase; Identical to Probable pectate lyase 3 precursor (EC 4.2.2.2) (Pectate lyase A2) (AT59) [Arabidopsis Thaliana] (GB:Q9M9S2;GB:O23665); similar to pectate lyase family protein [Arabidopsis thaliana] (TAIR:AT2G02720.1); similar to Probable pectate lyase P59 precursor (GB:P15722); contains InterPro domain Virulence factor, pectin lyase fold; (InterPro:IPR011050); contains InterPro domain Pectate lyase/Amb allergen; (InterPro:IPR002022); contains InterPro domain Pectate lyase, N-terminal; (InterPro:IPR007524); contains InterPro domain Pectolytic enzyme, Pectin lyase fold; (InterPro:IPR012334)"
+"47","Solyc05g012030.1.1",NA,NA,NA
+"48","Solyc05g012110.2.1","6-phosphogluconolactonase (AHRD V1 **** Q156I4_MANIN); contains Interpro domain(s)  IPR005900  6-phosphogluconolactonase ","AT1G13700","glucosamine/galactosamine-6-phosphate isomerase family protein; similar to EMB2024 (EMBRYO DEFECTIVE 2024), catalytic [Arabidopsis thaliana] (TAIR:AT5G24400.1); similar to putative 6-phosphogluconolactonase [Oryza sativa (japonica cultivar-group)] (GB:BAC83870.1); contains InterPro domain 6-phosphogluconolactonase; (InterPro:IPR005900); contains InterPro domain Glucosamine/galactosamine-6-phosphate isomerase; (InterPro:IPR006148)"
+"49","Solyc05g013880.1.1","WD-40 repeat family protein (AHRD V1 **-- Q1EPE0_MUSAC); contains Interpro domain(s)  IPR020472  G-protein beta WD-40 repeat, region ","AT1G24530","transducin family protein / WD-40 repeat family protein; similar to transducin family protein / WD-40 repeat family protein [Arabidopsis thaliana] (TAIR:AT1G24130.1); similar to WD40-like [Medicago truncatula] (GB:ABE82381.1); contains InterPro domain WD-40 repeat; (InterPro:IPR001680); contains InterPro domain WD40-like; (InterPro:IPR011046)"
+"50","Solyc05g013980.2.1",NA,NA,NA
+"51","Solyc05g015640.2.1",NA,NA,NA
+"52","Solyc05g046270.2.1",NA,NA,NA
+"53","Solyc05g053180.2.1",NA,NA,NA
+"54","Solyc06g008990.1.1",NA,NA,NA
+"55","Solyc06g050170.2.1","Potassium transporter (AHRD V1 **** Q1T761_PHRAU); contains Interpro domain(s)  IPR018519  Potassium uptake protein, kup  IPR003855  K+ potassium transporter ","AT2G40540","putative potassium transporter AtKT2p (AtKT2) mRNA,"
+"56","Solyc06g050460.1.1",NA,NA,NA
+"57","Solyc06g050700.2.1",NA,NA,NA
+"58","Solyc06g071830.2.1","BTB/POZ domain-containing protein (AHRD V1 **-- D2KTV8_LOTJA); contains Interpro domain(s)  IPR000197  Zinc finger, TAZ-type ","AT5G63160","BT1 (BTB and TAZ domain protein 1); protein binding / transcription regulator; similar to BT2 (BTB and TAZ domain protein 2), protein binding / transcription regulator [Arabidopsis thaliana] (TAIR:AT3G48360.1); similar to hypothetical protein [Trifolium pratense] (GB:BAE71259.1); contains InterPro domain Zinc finger, TAZ-type; (InterPro:IPR000197); contains InterPro domain BTB; (InterPro:IPR000210); contains InterPro domain BTB/POZ; (InterPro:IPR013069)"
+"59","Solyc06g082410.1.1","Nodulin-like protein (AHRD V1 ***- B6SP54_MAIZE); contains Interpro domain(s)  IPR016196  Major facilitator superfamily, general substrate transporter ","AT2G30300","nodulin-related; similar to NFD4 (NUCLEAR FUSION DEFECTIVE 4) [Arabidopsis thaliana] (TAIR:AT1G31470.1); similar to Os05g0475700 [Oryza sativa (japonica cultivar-group)] (GB:NP_001055832.1); similar to nodulin-like protein [Oryza sativa (japonica cultivar-group)] (GB:BAD73446.1); similar to Os01g0825500 [Oryza sativa (japonica cultivar-group)] (GB:NP_001044670.1); contains InterPro domain Nodulin-like; (InterPro:IPR010658); contains InterPro domain Major facilitator superfamily MFS_1; (InterPro:IPR011701)"
+"60","Solyc07g006500.2.1","Alpha alpha-trehalose-phosphate synthase (UDP-forming) (AHRD V1 **** D2REU5_ARCPA); contains Interpro domain(s)  IPR001830  Glycosyl transferase, family 20 ","AT2G18700","Encodes an enzyme putatively involved in trehalose biosynthesis.  The protein has a trehalose synthase (TPS)-like domain that may or may not be active as well as a trehalose phosphatase (TPP)-like domain."
+"61","Solyc07g006630.2.1",NA,NA,NA
+"62","Solyc07g008710.2.1",NA,NA,NA
+"63","Solyc07g019500.2.1",NA,NA,NA
+"64","Solyc07g043130.2.1","Os12g0117400 protein (Fragment) (AHRD V1 **-- Q0IQJ6_ORYSJ); contains Interpro domain(s)  IPR004249  NPH3 ","AT2G30520","light inducible root phototropism 2 encoding a signal transducer of the phototropic response in Arabidopsis"
+"65","Solyc07g052870.1.1",NA,NA,NA
+"66","Solyc08g045870.2.1",NA,NA,NA
+"67","Solyc08g045880.1.1",NA,NA,NA
+"68","Solyc08g061800.2.1",NA,NA,NA
+"69","Solyc08g066320.2.1",NA,NA,NA
+"70","Solyc08g066920.1.1",NA,NA,NA
+"71","Solyc08g067320.1.1","Chlorophyll a/b binding protein (AHRD V1 ***- Q41422_SOLTU); contains Interpro domain(s)  IPR001344  Chlorophyll A-B binding protein ","AT2G34430","Photosystem II type I chlorophyll            a/b-binding protein"
+"72","Solyc08g067330.1.1","Chlorophyll a-b binding protein 3C-like (AHRD V1 ***- Q2XTE0_SOLTU); contains Interpro domain(s)  IPR001344  Chlorophyll A-B binding protein ","AT1G29920","Encodes lhcb1.1 a component of the LHCIIb light harvesting complex associated with photosystem II."
+"73","Solyc08g068080.2.1",NA,NA,NA
+"74","Solyc08g078940.1.1",NA,NA,NA
+"75","Solyc08g078950.2.1","Nitrate transporter (AHRD V1 **** Q852P7_TOBAC); contains Interpro domain(s)  IPR000109  TGF-beta receptor, type I/II extracellular region ","AT1G12110","Encodes NRT1.1 (CHL1), a dual-affinity nitrate transporter. The protein is expressed in guard cells and function in stomatal opening. Mutants have less transpiration and are more tolerant to drought. Expressed in lateral roots. Involved in nitrate signaling which enables the plant root system to detect and exploit nitrate-rich soil patches. Comparing to the wild type, the mutant displays a strongly decreased lateral root proliferation phenotype in nitrate rich patches on growth medium."
+"76","Solyc09g011080.2.1","Ribulose-1 5-bisphosphate carboxylase/oxygenase activase 1 (AHRD V1 **** Q9AXG1_GOSHI); contains Interpro domain(s)  IPR003959  ATPase, AAA-type, core ","AT2G39730","Rubisco activase, a nuclear-encoded chloroplast protein that consists of two isoforms arising from alternative splicing in most plants. Required for the light activation of rubisco."
+"77","Solyc09g015810.1.1",NA,NA,NA
+"78","Solyc09g015850.2.1","Ribosomal protein S3 (Fragment) (AHRD V1 ***- A4KYC6_BALVI)","ATMG00090","ribosomal protein S3"
+"79","Solyc09g050050.1.1",NA,NA,NA
+"80","Solyc09g098270.2.1","Polygalacturonase (AHRD V1 ***- Q9SLP3_CUCSA); contains Interpro domain(s)  IPR000743  Glycoside hydrolase, family 28 ","AT1G23460","polygalacturonase; similar to polygalacturonase, putative / pectinase, putative [Arabidopsis thaliana] (TAIR:AT1G70500.1); similar to polygalacturonase [Cucumis sativus] (GB:BAA88472.1); contains InterPro domain Virulence factor, pectin lyase fold; (InterPro:IPR011050); contains InterPro domain Glycoside hydrolase, family 28; (InterPro:IPR000743); contains InterPro domain Pectolytic enzyme, Pectin lyase fold; (InterPro:IPR012334); contains InterPro domain Parallel beta-helix repeat; (InterPro:IPR006626)"
+"81","Solyc10g005030.2.1",NA,NA,NA
+"82","Solyc10g017960.1.1","F-box protein PP2-B1 (AHRD V1 *-*- PP2B1_ARATH); contains Interpro domain(s)  IPR001810  Cyclin-like F-box ","AT3G61060","ATPP2-A13; similar to ATPP2-A12 (Phloem protein 2-A12) [Arabidopsis thaliana] (TAIR:AT1G12710.1); similar to Cyclin-like F-box; Galactose-binding like [Medicago truncatula] (GB:ABE86301.1); contains InterPro domain Cyclin-like F-box; (InterPro:IPR001810)"
+"83","Solyc10g018830.1.1",NA,NA,NA
+"84","Solyc10g078500.1.1",NA,NA,NA
+"85","Solyc10g079520.1.1",NA,NA,NA
+"86","Solyc11g006710.1.1","Cationic amino acid transporter (AHRD V1 ***- B9HVV3_POPTR); contains Interpro domain(s)  IPR015606  Cationic amino acid transporter ","AT3G10600","Arabidopsis thaliana amino acid permease family protein (At3g10600)"
+"87","Solyc11g007530.1.1",NA,NA,NA
+"88","Solyc11g056270.1.1","Maturase (Fragment) (AHRD V1 ***- O79414_SOLTU); contains Interpro domain(s)  IPR000442  Intron maturase, type II ","ATMG00520","hypothetical protein"
+"89","Solyc11g056320.1.1",NA,NA,NA
+"90","Solyc11g056330.1.1","Uncharacterized mitochondrial protein AtMg01010 (AHRD V1 *-*- M1010_ARATH)","AT2G07674","Identical to Hypothetical mitochondrial protein AtMg01010 (ORF118) [Arabidopsis Thaliana] (GB:P92535;GB:Q8S878;GB:Q8S8C3); similar to hypothetical protein BrnapMp048 [Brassica napus] (GB:YP_717145.1)"
+"91","Solyc11g056410.1.1",NA,NA,NA
+"92","Solyc11g063610.1.1","Cytochrome c oxidase subunit 1 (AHRD V1 **** Q70G75_9SOLN); contains Interpro domain(s)  IPR000883  Cytochrome c oxidase, subunit I ","ATMG01360","cytochrome c oxidase subunit 1"
+"93","Solyc11g065550.1.1",NA,NA,NA
+"94","Solyc11g071860.1.1",NA,NA,NA
+"95","Solyc11g073120.1.1","MYB transcription factor (AHRD V1 *-*- Q56UT4_ORYSJ); contains Interpro domain(s)  IPR015495  Myb transcription factor ","AT3G46130","Encodes a putative transcription factor (MYB48)."
+"96","Solyc12g039070.1.1",NA,NA,NA
+"97","Solyc12g044330.1.1","Aquaporin (AHRD V1 ***- O81186_VERFO); contains Interpro domain(s)  IPR012269  Aquaporin ","AT3G16240","Delta tonoplast intrinsic protein, functions as a water channel and ammonium (NH3) transporter. Highly expressed in flower, shoot, and stem. Expression shows diurnal regulation and is induced by ammonium (NH3). Protein localized to vacuolar membrane."
