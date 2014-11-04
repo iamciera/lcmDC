@@ -1,0 +1,534 @@
+#Analysis 1 - Top 25% of coefficient of variation - SuperLarge SOM
+Author: Ciera Martinez
+Date: October 23 - 31, 2014
+
+##AIM 1
+
+**Purpose**:
+  
+  In this analysis I am using the top 25% of genes based on co-efficient of variation, then proceeding to Self Organizing Map (SOM) clustering of gene co-expression across tissue. This time I am looking at superLarge SOMs to see if I can get more specific expression patterns. 
+  
+**Tissue Key**:
+  
+SAM: Refers to shoot apices, likely with P0 - P4.
+Leaf:  Likley P5
+
+The plants were allowed to grow to 5 different ages (still need to talk with Yasu about specifics), the same tissue (SAM & Leaf), were extracted from plant of the five different ages (a1, b2, c3, d4, e5). 
+
+The tissue was dissected by Yasu.
+
+###Analysis
+
+Required Libraries
+```{r, echo=FALSE}
+library(ggplot2)
+library(reshape)
+library(kohonen)
+```
+
+Cluster visualization functions. These are functions that are re-used throughout analysis. These are not printed out in reports to save space. See .Rmd file for specifics of these functions.
+
+```{r, echo=FALSE}
+#ClusterVis
+clusterVis <- function(clustNum){
+  
+  sub_cluster <- subset(plot.data, som$unit.classif==clustNum)
+  sub_data <- sub_cluster[,c(1:11)] # just the sample types
+  m.data <- melt(sub_data) 
+  p <- ggplot(m.data, aes(x=variable, y=value))
+  p + geom_point(alpha=0.5,position="jitter", size=1) + 
+    geom_boxplot(alpha=0.75, outlier.size=0) + 
+    theme_bw() + 
+    theme(text = element_text(size=30),
+          axis.text.x = element_text(angle=90, 
+                                     vjust=1)) +
+    xlab("Library") +
+    ylab("Scaled Gene Expression")
+}
+```
+
+###clusterVis_line
+This function is used to plot gene expression profiles of clusters throughout time using a line plot. 
+
+To-do:
+  [] Need to remove unused x-axis values between graphs.
+
+```{r, eval=FALSE, echo=FALSE}
+clusterVis_line <- function(clustNum) {
+  sub_cluster <- subset(plot.data, som$unit.classif==clustNum)
+  sub_data <- sub_cluster[,c(1:11)] # just the sample types
+  m.data <- melt(sub_data)
+  m.data$region <- ifelse(grepl("SAM", m.data$variable, ignore.case = T), "SAM", 
+                          ifelse(grepl("leaf", m.data$variable, ignore.case = T), "leaf", "other"))
+  head(m.data)
+  m.data <- within(m.data, lineGroup <- paste(gene,sep='.'))
+  ggplot(m.data, aes(variable, value, group = lineGroup)) + 
+    geom_line(alpha = .1) + 
+    geom_point(alpha = .0) +
+    theme_bw() +
+    facet_grid(.~region) +
+    theme(axis.text.x = element_text(size=20, 
+                                     angle=90, 
+                                     vjust=1))
+}
+```
+
+##clusterVis_region 
+
+This function is not finished, but could be used to visually articulate age. 
+
+not finished. 
+```{r, eval = FALSE, echo=FALSE}
+clusterVis_region <- function(clustNum){
+  sub_cluster <- subset(plot.data, som$unit.classif==1)
+  sub_data <- sub_cluster[,c(1:11)] # just the sample types
+  m.data <- melt(sub_data)
+  m.data$region <- ifelse(grepl("SAM", m.data$variable, ignore.case = T), "SAM", 
+                          ifelse(grepl("leaf", m.data$variable, ignore.case = T), "leaf", "other"))
+  #Adds a column that specifies age 
+  m.data$age <- ifelse(grepl("a1", m.data$variable, ignore.case = T), "1", 
+                       ifelse(grepl("b2", m.data$variable, ignore.case = T), "2", 
+                              ifelse(grepl("c3", m.data$variable, ignore.case = T), "3", 
+                                     ifelse(grepl("d4", m.data$variable, ignore.case = T), "4",
+                                            ifelse(grepl("e5", m.data$variable, ignore.case = T), "5", "other")
+                                     )
+                              )
+                       )
+  )
+  
+  head(m.data)       
+  p <- ggplot(m.data, aes(y=value, x=variable, fill = age))
+  p + geom_point(alpha=0.5,position="jitter", size=1) + 
+    geom_boxplot(alpha=0.70, outlier.size=0) +
+    scale_colour_manual(values = c("darkorchid1", "coral")) +
+    theme(legend.text = element_text(
+      size = 30, 
+      face = "bold"), 
+      text = element_text(size=40)) + 
+    theme_bw() + 
+    theme(text = element_text(size=30)) +
+    facet_grid(.~region) 
+}
+```
+
+##genesInCluster()
+
+This function is used to identify which genes are in the cluster. 
+
+```{r, echo=FALSE}
+#Prereq annotation files for function
+
+annotation1<- read.delim("../data/ITAG2.3_all_Arabidopsis_ITAG_annotations.tsv", header=FALSE)  #Changed to the SGN human readable annotation
+colnames(annotation1) <- c("ITAG", "SGN_annotation")
+annotation2<- read.delim ("../data/ITAG2.3_all_Arabidopsis_annotated.tsv")
+annotation <- merge(annotation1,annotation2, by = "ITAG")
+
+#Only Gene Name and ITAG
+names(annotation)
+annotation <- annotation[,c(1,2,3,5)]
+
+#fix with regex if ITAG does not include the last digits
+#annotation$ITAG <- gsub("^(.*)[.].*", "\\1", annotation$ITAG)
+#annotation$ITAG <- gsub("^(.*)[.].*", "\\1", annotation$ITAG)
+
+###genesInClust()
+#This looks at how many unique genes are in each cluster. 
+
+genesInClust <- function(clustNum, plot.data, annotation) {
+  sub_cluster <- subset(plot.data, som$unit.classif==clustNum)
+  sub_data <- as.data.frame(sub_cluster[,1])
+  colnames(sub_data) <- "ITAG"
+  resultsTable <- merge(sub_data,annotation,by = "ITAG", all.x=TRUE)
+  print(nrow(unique(resultsTable)))
+  return(unique(resultsTable))
+}
+```
+
+###Get the co-efficient of variation. 
+
+```{r}
+countData <- read.csv("../data/normalized_count_file.csv")
+#Then sort
+#it adds numbers to them to make them unique but ignore
+countData1 <- countData[,order(names(countData))] #sorting for easier assignment
+names(countData1)
+countData1 <- subset(countData1, select=c(47,1:46)) #re-order
+```
+
+```{r}
+#remove low count libraries (3rd.leaf.7, 2nd.SAM.4, 5th.leaf.3)
+dim(countData1) #check 
+names(countData1) #check
+countData2 <- countData1[,-c(39,32,11)] #removal
+names(countData2) #check 
+dim(countData2) #check
+
+#get row means per tissue type. This could be improved to be more manual. 
+
+countData2$a1.leaf <- rowMeans(subset(countData2[10:11]))
+countData2$a1.SAM <- rowMeans(subset(countData2[12:15]))
+countData2$b2.leaf <- rowMeans(subset(countData2[24:27]))
+countData2$b2.SAM <- rowMeans(subset(countData2[28:30]))
+countData2$c3.leaf <- rowMeans(subset(countData2[31:36]))
+countData2$c3.SAM <- rowMeans(subset(countData2[37:44]))
+countData2$d4.leaf <- rowMeans(subset(countData2[16:19]))
+countData2$d4.SAM <- rowMeans(subset(countData2[20:23]))
+countData2$e5.leaf <- rowMeans(subset(countData2[2:5]))
+countData2$e5.SAM <- rowMeans(subset(countData2[6:10]))
+
+dim(countData2) #check
+names(countData2) #check
+
+#Average and Standard deviation
+ave <- subset(countData2[45:54])
+ave$sd <- apply(ave,1,function(d)sd(d))
+ave$average <- rowMeans(subset(ave[1:10]))
+ave$cv <- ave$sd / ave$average
+dim(ave)#check
+names(ave)#check
+
+#combine new columns to orginal
+countData <- cbind(countData, countData2[45:54]) 
+countData <- cbind(countData, ave[,11:13])
+
+names(countData) #check
+```
+
+```{r}
+quantile(countData$cv) #get quantile use 75% for subsetting top 25%
+countData[is.na(countData)] <- 0 #get rid of NA
+subCountData <- subset(countData, cv > 0.61264422) #top 25% 
+
+allGenes25 <- subCountData[,c(1,48:60)] #This is the subset of genes we will use for analysis
+colnames(allGenes25)[1]<-"gene" #rename first column appropriatly 
+```
+
+###PCA
+
+
+```{r}
+#write.csv(allGenes25, "../data/analysis4.top25.csv") #to write out data if needed.
+scale_data <- as.matrix(t(scale(t(allGenes25[c(2:11)]))))  #scale data
+
+#Principle Component Analysis
+pca <- prcomp(scale_data, scale=TRUE) 
+
+summary(pca) 
+pca.scores <- data.frame(pca$x)
+
+data.val.allGenes25 <- cbind(allGenes25, scale_data, pca.scores) 
+```
+
+###Visualizing the PCA
+
+```{r}
+p <- ggplot(data.val.allGenes25, aes(PC1, PC2))
+p + geom_point()
+```
+
+###Self Organizing Map - (6,6) Large
+
+Since we are interested in particular co-expression pattern (up or down through time), I did a large SOM to explicitly  find these clusters. 
+
+```{r}
+data.val <- data.val.allGenes25
+
+som.data <- as.matrix(data.val[,c(15:24)])  #subset only the scaled gene expression values
+
+set.seed(2)
+
+som <- som(data=som.data, somgrid(10,10,"hexagonal")) # This is where you change the size of the map
+summary(som)
+```
+
+-----------------
+  
+###Training Plot ("changes") 
+  
+```{r}
+plot(som, type ="changes")
+```
+
+###Code Plot - Large
+
+```{r}
+plot(som, type = "codes")
+```
+
+###Count Plot - superLarge
+
+This tells you how many genes are in each of the clusters. The count plot can be used as a quality check.  Ideally you want a uniform distribution.  If there are some peaks in certain areas, this means you should likely increase the map size.  If you have empty nodes you should decrease the map size [1]. 
+
+```{r}
+plot(som, type = "counts")
+```
+
+###Distance Neighbour Plot - superLarge
+
+```{r}
+plot(som, type="dist.neighbours")
+```
+
+###Heatmaps - superlarge
+
+```{r}
+head(som$codes) #check
+som$data <- data.frame(som$data) #changed to dataframe to extract column names easier. 
+
+#This is just a loop that plots the distribution of each tissue type across the map. 
+for (i in 1:10){
+  plot(som, type = "property", property = som$codes[,i], main=names(som$data)[i])
+  print(plot)
+}
+```
+
+##Visualize by Cluster
+
+```{r}
+##Bring the datasets back together for cluster specific visualizations
+plot.data <- cbind(data.val[,c(1,15:34)],som$unit.classif,som$distances)
+names(plot.data) #check
+```
+
+##Visualize by cluster
+
+```{r}
+# clusterVis_line(1)
+# clusterVis_line(2) 
+# clusterVis_line(3)
+# clusterVis_line(4)
+# clusterVis_line(5)
+# clusterVis_line(6)
+# clusterVis_line(7)
+# clusterVis_line(8)
+# clusterVis_line(9)
+# clusterVis_line(10)
+# clusterVis_line(11)
+# clusterVis_line(12) 
+# clusterVis_line(13)
+# clusterVis_line(14)
+# clusterVis_line(15)
+# clusterVis_line(16) 
+# clusterVis_line(17)
+clusterVis_line(18) #up in SAM
+y <- genesInClust(18, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis4.cluster18.csv")
+
+# clusterVis_line(19)
+# clusterVis_line(20)
+# clusterVis_line(21)
+# clusterVis_line(22)
+# clusterVis_line(23)
+# clusterVis_line(24)
+# clusterVis_line(25)
+# clusterVis_line(26)
+# clusterVis_line(27)
+
+clusterVis_line(28) #up in both
+y <- genesInClust(28, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis4.cluster28.csv")
+
+# clusterVis_line(29)
+# clusterVis_line(30)
+# clusterVis_line(31)
+# clusterVis_line(32)
+# clusterVis_line(33)
+# clusterVis_line(34)
+# clusterVis_line(35)
+# clusterVis_line(36)
+# clusterVis_line(37)
+# clusterVis_line(38)
+# clusterVis_line(39)
+
+clusterVis_line(40) #up in both
+y <- genesInClust(40, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis4.cluster40.csv")
+# clusterVis_line(41)
+# clusterVis_line(42)
+# clusterVis_line(43)
+# clusterVis_line(44)
+# clusterVis_line(45)
+# clusterVis_line(46)
+# clusterVis_line(47)
+
+clusterVis_line(49) #up in leaf
+y <- genesInClust(49, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis4.cluster49.csv")
+
+# clusterVis_line(50)
+# clusterVis_line(51)
+# clusterVis_line(52)
+# clusterVis_line(53)
+# clusterVis_line(54)
+# clusterVis_line(55)
+# clusterVis_line(56)
+# clusterVis_line(57)
+# clusterVis_line(58)
+# clusterVis_line(59)
+# clusterVis_line(60)
+# clusterVis_line(61)
+# clusterVis_line(62)
+# clusterVis_line(63)
+# clusterVis_line(64)
+# clusterVis_line(65)
+# clusterVis_line(66)
+# clusterVis_line(67)
+# clusterVis_line(68)
+# clusterVis_line(69)
+# clusterVis_line(70)
+# clusterVis_line(71)
+# clusterVis_line(72)
+# clusterVis_line(73)
+# clusterVis_line(74)
+# clusterVis_line(75)
+# clusterVis_line(76)
+# clusterVis_line(77)
+# clusterVis_line(78)
+# clusterVis_line(79)
+# clusterVis_line(80)
+# clusterVis_line(81)
+# clusterVis_line(82)
+
+clusterVis_line(83) #down in leaf
+y <- genesInClust(83, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis4.cluster83.csv")
+
+# clusterVis_line(84)
+# clusterVis_line(85)
+# clusterVis_line(86)
+# clusterVis_line(87)
+# clusterVis_line(88)
+# clusterVis_line(89)
+# clusterVis_line(90)
+# clusterVis_line(91)
+
+clusterVis_line(92)  #down in leaf 
+y <- genesInClust(92, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis4.cluster92.csv")
+
+# clusterVis_line(93)
+# clusterVis_line(94)
+# clusterVis_line(95)
+# clusterVis_line(96)
+# clusterVis_line(97)
+# clusterVis_line(98)
+# clusterVis_line(99)
+# clusterVis_line(100)
+```
+
+#Aim 2: Specific Genes
+
+Talking to Dan Chitwood: we need to look into specific genes.  Which clusters do they fall into?  From Dan via email:
+  
+  *The idea behind these experiments is a bit abstract, but let me try to convey it simply. 1) KNOXs are up in the leaf primordium in foliar shade. 2) As you would expect from this, leaves are statistically more complex in shade. 3) But shade also modulates the heteroblastic series. There is lots of classical literature on this. 4) Leaf complexity in tomato increases across the heteroblasty series already.
+
+What we didn't know is whether KNOX gene expression increases in the primordia of successive leaves across the heteroblastic series or not. If so, it suggests a mechanism by which shape, heteroblasty, and environmental response are integrated. If not, it suggests that increases in KNOX expression in shade affect leaf shape more than heteroblasty per se for shade, and that mechanisms modulating increases in leaf complexity across the series are not mediated through KNOX genes (a recent commentary Neelima and I wrote on a piece by Detlef suggests that actually TCPs/CUCs mediate heteroblasty more than KNOXs in Arabidopsis).
+
+For starters, how do the following Knotted-like genes behave in your dataset?
+
+Solyc04g077210.2.1
+Solyc05g005090.2.1
+Solyc01g100510.2.1
+Solyc11g069890.1.1
+Solyc02g081120.2.1
+
+Other genes to consider are the most significant in Dataset S2, which are those differentially expressed between constant sun and 28hr shade swapped leaf primordia.**
+
+Make lists of genes.
+
+```{r}
+#Genes that are differentially expressed between constand sum and 28 hr shade swapped leaf primordia via Supplemntary Material v9_DatasetS2.xls
+
+v9 <- read.csv("../data/DE_v9_DatasetS2.csv")
+dim(v9) #there are 645 genes in this list
+
+#isolate the first column
+v9.ITAG <- as.data.frame(v9[,1])
+colnames(v9.ITAG)[1] <- "ITAG"
+
+```
+
+Merge `data.val` into each of these lists, do not keep the non-overlapp.
+
+```{r}
+dim(plot.data)#check
+names(plot.data)
+
+plot.data2 <- plot.data
+colnames(plot.data2)[1]<-"ITAG"
+
+dim(v9.ITAG) #check
+v9.cluster <- merge(v9.ITAG, plot.data2, by = "ITAG") 
+dim(v9.cluster) #check
+
+#Get only needed columns 
+v9.clusterIDs <- v9.cluster[,c(1,22,23)]
+colnames(v9.clusterIDs)[2]<-"cluster"
+
+#Visualize how many genes fall into which cluster
+str(v9.clusterIDs) #need cluster to be factor
+v9.clusterIDs$cluster <- as.factor(v9.clusterIDs$cluster)
+
+summary(v9.clusterIDs)
+plot(v9.clusterIDs$cluster) #possible enriched in cluster #5, 6, and 17? Is there a way to statistically test this?
+```
+
+Is this due to cluster size? What genes are in these clusters?
+
+```{r}
+clusterVis_line(5)
+y <- genesInClust(5, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis4.cluster5.csv")
+
+clusterVis_line(6)
+y <- genesInClust(6, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis4.cluster6.csv")
+
+clusterVis_line(17)
+y <- genesInClust(17, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis4.cluster17.csv")
+```
+
+Cluster size does not appear to make a big difference
+```{r}
+plot(som, type = "counts")
+```
+
+About Average.  Are there statistics that can be done with this?  What does the gene expression pattern in these clusters even mean?  
+
+###Knotted - like genes
+
+```{r}
+#Knotted-like 
+ITAG <- c("Solyc04g077210.2.1","Solyc05g005090.2.1","Solyc01g100510.2.1", "Solyc11g069890.1.1", "Solyc02g081120.2.1")
+
+knottedGenes <- data.frame(ITAG)
+#head(knottedGenes)
+
+#names(plot.data2)
+#names(knottedGenes)
+
+knot.cluster <- merge(knottedGenes, plot.data2, by = "ITAG") 
+
+#Get only needed columns 
+names(knot.cluster)
+knot.clusterIDs <- knot.cluster[,c(1,22,23)]
+
+knot.clusterIDs #clusters 6 and 5
+
+clusterVis_line(6)
+y <- genesInClust(6, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis4.cluster6.csv")
+clusterVis_line(5)
+clusterVis_line(37)
+```
+
+
+**Overall Results and Future Analysis**:
+
+There are several clusters that could be looked at more closely. These are in the `clusterTables` directory.  The larger the SOM the tighter the expression patterns in the cluster. 
+
+
+
+
+

@@ -26,9 +26,9 @@ library(reshape)
 library(kohonen)
 ```
 
-Cluster visualization functions. These are functions that are re-used throughout analysis.
+Cluster visualization functions. These are functions that are re-used throughout analysis. These are not printed out in reports to save space. See .Rmd file for specifics of these funtions.
 
-```{r}
+```{r, echo=FALSE}
 #ClusterVis
 clusterVis <- function(clustNum){
   
@@ -53,7 +53,7 @@ This function is used to plot gene expression profiles of clusters throughout ti
 To-do:
 [] Need to remove unused x-axis values between graphs.
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo = FALSE}
 clusterVis_line <- function(clustNum) {
   sub_cluster <- subset(plot.data, som$unit.classif==clustNum)
   sub_data <- sub_cluster[,c(1:11)] # just the sample types
@@ -78,7 +78,7 @@ clusterVis_line <- function(clustNum) {
 This function is not finished, but could be used to visually articulate age. 
 
 not finished. 
-```{r, eval = FALSE}
+```{r, eval = FALSE, echo=FALSE}
 clusterVis_region <- function(clustNum){
   sub_cluster <- subset(plot.data, som$unit.classif==1)
   sub_data <- sub_cluster[,c(1:11)] # just the sample types
@@ -115,7 +115,7 @@ clusterVis_region <- function(clustNum){
 
 This function is used to identify which genes are in the cluster. 
 
-```{r}
+```{r, echo=FALSE}
 #Prereq annotation files for function
 
 annotation1<- read.delim("../data/ITAG2.3_all_Arabidopsis_ITAG_annotations.tsv", header=FALSE)  #Changed to the SGN human readable annotation
@@ -143,7 +143,64 @@ genesInClust <- function(clustNum, plot.data, annotation) {
   return(unique(resultsTable))
   }
 ```
+##clusterGO()
 
+Prints out how many genes in cluster and performs GO enrichment. 
+*One thing you can add is if you do slim or regular GO.  Or both.*
+
+```{r}
+#prereq files 
+geneLength <- read.csv("../data/normalized_genes_length.csv")
+cate <- read.table("../data/melted.GOTable.txt",header=TRUE)
+
+
+#required libraries
+library(goseq)
+library(GO.db)
+
+clusterGO <- function(clustNum){
+  ##Sets up plot
+  dev.off()
+  plot.new()
+  
+  #sub_cluster
+  sub_cluster <- subset(plot.data, som$unit.classif==1)
+
+  itag.sc <- as.data.frame(sub_cluster$gene) 
+  colnames(itag.sc)[1] <- "itag"
+  itag.sc$sc <- 1    
+  
+  #Merge all by itag
+  matrixGO <- merge(itag.sc, geneLength, by = "itag", all = TRUE)
+  matrixGO[is.na(matrixGO)] <- 0
+  pat <- matrixGO
+  
+  #Now that we have the data in the right format, we can proceed with GO enrichment.
+  
+    genes = as.integer(pat[,"sc"])
+    names(genes) = pat$itag
+    table(genes)
+    length(genes)
+  
+    pwf = nullp(genes,bias.data=pat$length)
+  
+    GO.wall = goseq(pwf,gene2cat = cate)
+    head(GO.wall, 30)
+  
+  #This is going to correct for multiple testing.  You can specify the p-value cut-off of GO categories you are interested.
+  
+    enriched.GO = GO.wall$category[p.adjust(GO.wall$over_represented_pvalue, method = "BH") < 0.05]
+  
+    enriched.GO
+  
+    my.GO <- as.character(enriched.GO)
+    my.GO.table <- Term(my.GO)
+    my.GO.table
+    t <- as.matrix(my.GO.table)
+
+    print(t) #prints only GO categories that are significant
+}
+```
 ###Get the co-efficient of variation. 
 
 ```{r}
@@ -421,8 +478,8 @@ clusterVis_line(27)
 y <- genesInClust(27, plot.data, annotation)
 write.csv(y, "../clusterTables/analysis1.cluster27.csv")
 
-clusterVis_line(24)
-y <- genesInClust(24, plot.data, annotation)
+clusterVis_line(22)
+y <- genesInClust(22, plot.data, annotation)
 write.csv(y, "../clusterTables/analysis1.cluster24.csv")
 
 clusterVis_line(23)
@@ -515,7 +572,7 @@ There are several clusters that could be looked at more closely. These are in th
 
 The clustering may be confounded between SAM and leaf tissue being forced into same cluster. I think  looking at each of these tissues seperatley could be useful. See `dclcmSOM_analysis2_102814.Rmd`. 
 
-Also, varying SOM sizes could yield more explicit gene expression patterns if larger SOM or allow the ability to do GO-enrichemnt/promoter enrichment if smaller SOM. 
+Also, varying SOM sizes could yield more explicit gene expression patterns if larger SOM or allow the ability to do GO-enrichment/promoter enrichment if smaller SOM. 
 
 
 

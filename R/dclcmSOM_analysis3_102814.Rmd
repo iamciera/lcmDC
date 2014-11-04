@@ -214,7 +214,7 @@ som.data <- as.matrix(data.val[,c(15:24)])  #subset only the scaled gene express
 
 set.seed(2)
 
-som <- som(data=som.data, somgrid(3,2,"hexagonal")) # This is where you change the size of the map
+som <- som(data=som.data, somgrid(3,3,"hexagonal")) # This is where you change the size of the map
 summary(som)
 ```
 

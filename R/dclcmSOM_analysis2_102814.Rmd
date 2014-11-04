@@ -98,6 +98,7 @@ clusterVis_region <- function(clustNum){
 }
 ```
 
+
 ##1. Get the co-efficient of variation
 
 ```{r}
@@ -148,27 +149,23 @@ countData[is.na(countData)] <- 0
 subCountData <- subset(countData, cv > 0.61264422)
 allGenes25 <- subCountData[,c(1,48:60)]
 colnames(allGenes25)[1]<-"gene"
+names(allGenes25)
+
 ```
 
+##SAM
 ###Subset by region
 
 ```{r}
-
-  m.data <- melt(allGenes25)
-  m.data$region <- ifelse(grepl("SAM", m.data$variable, ignore.case = T), "SAM", 
-                          ifelse(grepl("leaf", m.data$variable, ignore.case = T), "leaf", "other"))
-  SAM.allGenes25<- subset(m.data, region == "SAM")
-  SAM.allGenes25 <- dcast(SAM.allGenes25, gene ~ variable)
-  head(SAM.allGenes25)
+SAM.allGenes25 <- allGenes25[, c(1,3,5,7,9,11)]
+names(SAM.allGenes25) #check
 ```
 
 ##2.pca - Small
 
 ```{r}
-#write.csv(allGenes25, "../data/analysis4.top25.csv")
-
 scale_data <- as.matrix(t(scale(t(SAM.allGenes25[c(2:6)]))))
-scale_data[is.na(scale_data)] <- 0 #how did NAs get reintroduced?
+scale_data[is.na(scale_data)] <- 0 #how did NAs get reintroduced
 
 #Principle Component Analysis
 pca <- prcomp(scale_data, scale=TRUE) 
@@ -181,9 +178,10 @@ head(SAM.allGenes25)
 ```
 
 ##Visualizing the PCA
+This looks weird.
 
 ```{r}
-p <- ggplot(data.val.allGenes25, aes(PC1, PC2))
+p <- ggplot(SAM.allGenes25, aes(PC1, PC2))
 p + geom_point()
 ```
 
@@ -191,8 +189,9 @@ p + geom_point()
 
 ```{r}
 data.val <- SAM.allGenes25
+head(data.val)
 som.data <- as.matrix(data.val[,c(2:6)])  #subset only the scaled gene expression values
-set.seed(2)
+set.seed(4)
 som <- som(data=som.data, somgrid(3,2,"hexagonal")) # This is where you change the size of the map
 summary(som)
 ```
@@ -223,20 +222,7 @@ plot(som, type = "counts")
 plot(som, type="dist.neighbours")
 ```
 
-###Heatmaps - small
-
-```{r}
-head(som$codes)
-som$data <- data.frame(som$data) #changed to dataframe to extract column names easier. 
-
-#This is just a loop that plots the distribution of each tissue type across the map. 
-for (i in 1:10){
-  plot(som, type = "property", property = som$codes[,i], main=names(som$data)[i])
-  print(plot)
-  }
-```
-
-##Visualize by Cluster
+###Visualize by Cluster
 
 ```{r}
 ##Bring the datasets back together for cluster specific visualizations
@@ -251,7 +237,7 @@ p <- ggplot(data.val, aes(PC1, PC2, colour=factor(som$unit.classif)))
 p + geom_point() + theme_bw()
 ```
 
-##Visualize by cluster
+###Visualize by cluster
 
 ```{r}
 clusterVis_line(1)
@@ -260,14 +246,5 @@ clusterVis_line(3)
 clusterVis_line(4)
 clusterVis_line(5)
 clusterVis_line(6)
-clusterVis_line(7)
-clusterVis_line(8)
-clusterVis_line(9)
-clusterVis_line(10)
-clusterVis_line(11)
-clusterVis_line(12)
-clusterVis_line(13)
-clusterVis_line(14)
-clusterVis_line(15)
 #ect
 ```

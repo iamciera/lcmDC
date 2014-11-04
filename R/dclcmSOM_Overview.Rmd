@@ -1,0 +1,459 @@
+#Analysis 1 - Top 25% of coefficient of variation Large SOM
+Author: Ciera Martinez
+Date: October 23 - 31, 2014
+
+#Overview
+**Purpose**:
+
+I used the top 25% of genes based on co-efficient of variation, then proceeded to Self Organizing Map (SOM) clustering of gene co-expression across tissue. From discussions with Neelima, the only aspect that we are really interested in co-expression of genes through time in each tissue seperatley. We are not interested in the interaction between these tissues at this time. Ideally we are looking for genes that have co-expression patterns of up-regulation through time or down regulation through time. That was the aim of Analysis1 (for details see dclcmSOM_analysis1_102314 files).
+
+**Tissue Key**:
+
+SAM: Refers to shoot apices, likely with P0 - P4.
+Leaf:  Likley P5
+
+The plants were allowed to grow to 5 different ages (still need to talk with Yasu about specifics), the same tissue (SAM & Leaf), were extracted from plant of the five different ages (a1, b2, c3, d4, e5). 
+
+```{r, echo = FALSE}
+library(ggplot2)
+library(reshape)
+library(kohonen)
+
+#ClusterVis
+clusterVis <- function(clustNum){
+  
+  sub_cluster <- subset(plot.data, som$unit.classif==clustNum)
+  sub_data <- sub_cluster[,c(1:11)] # just the sample types
+  m.data <- melt(sub_data) 
+  p <- ggplot(m.data, aes(x=variable, y=value))
+  p + geom_point(alpha=0.5,position="jitter", size=1) + 
+    geom_boxplot(alpha=0.75, outlier.size=0) + 
+    theme_bw() + 
+    theme(text = element_text(size=30),
+          axis.text.x = element_text(angle=90, 
+                                     vjust=1)) +
+    xlab("Library") +
+    ylab("Scaled Gene Expression")
+}
+
+clusterVis_line <- function(clustNum) {
+  sub_cluster <- subset(plot.data, som$unit.classif==clustNum)
+  sub_data <- sub_cluster[,c(1:11)] # just the sample types
+  m.data <- melt(sub_data)
+  m.data$region <- ifelse(grepl("SAM", m.data$variable, ignore.case = T), "SAM", 
+                          ifelse(grepl("leaf", m.data$variable, ignore.case = T), "leaf", "other"))
+  head(m.data)
+  m.data <- within(m.data, lineGroup <- paste(gene,sep='.'))
+  ggplot(m.data, aes(variable, value, group = lineGroup)) + 
+    geom_line(alpha = .1) + 
+    geom_point(alpha = .0) +
+    theme_bw() +
+    facet_grid(.~region) +
+    theme(axis.text.x = element_text(size=20, 
+                                angle=90, 
+                                vjust=1))
+  }
+
+clusterVis_region <- function(clustNum){
+  sub_cluster <- subset(plot.data, som$unit.classif==1)
+  sub_data <- sub_cluster[,c(1:11)] # just the sample types
+  m.data <- melt(sub_data)
+  m.data$region <- ifelse(grepl("SAM", m.data$variable, ignore.case = T), "SAM", 
+                          ifelse(grepl("leaf", m.data$variable, ignore.case = T), "leaf", "other"))
+  #Adds a column that specifies age 
+  m.data$age <- ifelse(grepl("a1", m.data$variable, ignore.case = T), "1", 
+                          ifelse(grepl("b2", m.data$variable, ignore.case = T), "2", 
+                            ifelse(grepl("c3", m.data$variable, ignore.case = T), "3", 
+                                ifelse(grepl("d4", m.data$variable, ignore.case = T), "4",
+                                  ifelse(grepl("e5", m.data$variable, ignore.case = T), "5", "other")
+                                  )
+                                )
+                             )
+                          )
+  
+  head(m.data)       
+  p <- ggplot(m.data, aes(y=value, x=variable, fill = age))
+  p + geom_point(alpha=0.5,position="jitter", size=1) + 
+    geom_boxplot(alpha=0.70, outlier.size=0) +
+    scale_colour_manual(values = c("darkorchid1", "coral")) +
+    theme(legend.text = element_text(
+      size = 30, 
+      face = "bold"), 
+      text = element_text(size=40)) + 
+    theme_bw() + 
+    theme(text = element_text(size=30)) +
+    facet_grid(.~region) 
+}
+
+#Prereq annotation files for function
+
+annotation1<- read.delim("../data/ITAG2.3_all_Arabidopsis_ITAG_annotations.tsv", header=FALSE)  #Changed to the SGN human readable annotation
+colnames(annotation1) <- c("ITAG", "SGN_annotation")
+annotation2<- read.delim ("../data/ITAG2.3_all_Arabidopsis_annotated.tsv")
+annotation <- merge(annotation1,annotation2, by = "ITAG")
+
+#Only Gene Name and ITAG
+names(annotation)
+annotation <- annotation[,c(1,2,3,5)]
+
+#fix with regex if ITAG does not include the last digits
+#annotation$ITAG <- gsub("^(.*)[.].*", "\\1", annotation$ITAG)
+#annotation$ITAG <- gsub("^(.*)[.].*", "\\1", annotation$ITAG)
+
+###genesInClust()
+#This looks at how many unique genes are in each cluster. 
+
+genesInClust <- function(clustNum, plot.data, annotation) {
+  sub_cluster <- subset(plot.data, som$unit.classif==clustNum)
+  sub_data <- as.data.frame(sub_cluster[,1])
+  colnames(sub_data) <- "ITAG"
+  resultsTable <- merge(sub_data,annotation,by = "ITAG", all.x=TRUE)
+  print(nrow(unique(resultsTable)))
+  return(unique(resultsTable))
+  }
+
+##clusterGO()
+
+#Prints out how many genes in cluster and performs GO enrichment. 
+#*One thing you can add is if you do slim or regular GO.  Or both.*
+
+
+#prereq files 
+geneLength <- read.csv("../data/normalized_genes_length.csv")
+cate <- read.table("../data/melted.GOTable.txt",header=TRUE)
+
+
+#required libraries
+library(goseq)
+library(GO.db)
+
+clusterGO <- function(clustNum){
+  ##Sets up plot
+  dev.off()
+  plot.new()
+  
+  #sub_cluster
+  sub_cluster <- subset(plot.data, som$unit.classif==clustNum)
+
+  itag.sc <- as.data.frame(sub_cluster$gene) 
+  colnames(itag.sc)[1] <- "itag"
+  itag.sc$sc <- 1    
+  
+  #Merge all by itag
+  matrixGO <- merge(itag.sc, geneLength, by = "itag", all = TRUE)
+  matrixGO[is.na(matrixGO)] <- 0
+  pat <- matrixGO
+  
+  #Now that we have the data in the right format, we can proceed with GO enrichment.
+  
+    genes = as.integer(pat[,"sc"])
+    names(genes) = pat$itag
+    table(genes)
+    length(genes)
+  
+    pwf = nullp(genes,bias.data=pat$length)
+  
+    GO.wall = goseq(pwf,gene2cat = cate)
+    head(GO.wall, 30)
+  
+  #This is going to correct for multiple testing.  You can specify the p-value cut-off of GO categories you are interested.
+  
+    enriched.GO = GO.wall$category[p.adjust(GO.wall$over_represented_pvalue, method = "BH") < 0.05]
+  
+    enriched.GO
+  
+    my.GO <- as.character(enriched.GO)
+    my.GO.table <- Term(my.GO)
+    my.GO.table
+    t <- as.matrix(my.GO.table)
+
+    print(t) #prints only GO categories that are significant
+}
+
+countData <- read.csv("../data/normalized_count_file.csv")
+#Then sort
+#it adds numbers to them to make them unique but ignore
+countData1 <- countData[,order(names(countData))] #sorting for easier assignment
+countData1 <- subset(countData1, select=c(47,1:46)) #re-order
+
+#remove low count libraries (3rd.leaf.7, 2nd.SAM.4, 5th.leaf.3)
+
+countData2 <- countData1[,-c(39,32,11)] #removal
+
+
+#get row means per tissue type. This could be improved to be more manual. 
+
+countData2$a1.leaf <- rowMeans(subset(countData2[10:11]))
+countData2$a1.SAM <- rowMeans(subset(countData2[12:15]))
+countData2$b2.leaf <- rowMeans(subset(countData2[24:27]))
+countData2$b2.SAM <- rowMeans(subset(countData2[28:30]))
+countData2$c3.leaf <- rowMeans(subset(countData2[31:36]))
+countData2$c3.SAM <- rowMeans(subset(countData2[37:44]))
+countData2$d4.leaf <- rowMeans(subset(countData2[16:19]))
+countData2$d4.SAM <- rowMeans(subset(countData2[20:23]))
+countData2$e5.leaf <- rowMeans(subset(countData2[2:5]))
+countData2$e5.SAM <- rowMeans(subset(countData2[6:10]))
+
+
+#Average and Standard deviation
+ave <- subset(countData2[45:54])
+ave$sd <- apply(ave,1,function(d)sd(d))
+ave$average <- rowMeans(subset(ave[1:10]))
+ave$cv <- ave$sd / ave$average
+dim(ave)#check
+names(ave)#check
+
+#combine new columns to orginal
+countData <- cbind(countData, countData2[45:54]) 
+countData <- cbind(countData, ave[,11:13])
+
+
+quantile(countData$cv) #get quantile use 75% for subsetting top 25%
+countData[is.na(countData)] <- 0 #get rid of NA
+subCountData <- subset(countData, cv > 0.61264422) #top 25% 
+
+allGenes25 <- subCountData[,c(1,48:60)] #This is the subset of genes we will use for analysis
+colnames(allGenes25)[1]<-"gene" #rename first column appropriatly 
+```
+
+###PCA
+
+
+```{r}
+#write.csv(allGenes25, "../data/analysis4.top25.csv") #to write out data if needed.
+scale_data <- as.matrix(t(scale(t(allGenes25[c(2:11)]))))  #scale data
+
+#Principle Component Analysis
+pca <- prcomp(scale_data, scale=TRUE) 
+
+summary(pca) 
+pca.scores <- data.frame(pca$x)
+
+data.val.allGenes25 <- cbind(allGenes25, scale_data, pca.scores) 
+```
+
+##Summary of Analysis 1
+
+###Visualizing the PCA
+
+```{r, echo = FALSE}
+p <- ggplot(data.val.allGenes25, aes(PC1, PC2))
+p + geom_point()
+
+p <- ggplot(data.val.allGenes25, aes(PC3, PC4))
+p + geom_point()
+```
+
+There doesn't appear to be clear clustering. There are these swooping lines.  Not sure what they are. Aashish informs me that they happen often, but I don't really understand what causes them.  Maybe you know Dan?
+
+###Self Organizing Map - (6,6) Large
+
+Since we are interested in particular co-expression pattern (up or down through time), I did a large SOM to explicitly find  clusters with these trends. 
+
+```{r, echo =FALSE}
+data.val <- data.val.allGenes25
+
+som.data <- as.matrix(data.val[,c(15:24)])  #subset only the scaled gene expression values
+
+set.seed(2) #arbitraty. doesn't affect clusters very much, just
+
+som <- som(data=som.data, somgrid(6,6,"hexagonal")) # This is where you change the size of the map
+summary(som)
+
+plot(som, type ="changes")
+```
+
+###Influence of tissue on clusters
+
+```{r}
+plot(som, type = "codes")
+```
+
+###Count Plot - Large
+
+Pretty uniform clustering, with the exception of cluster 36 which has over 500, but most clusters have around 100-200.  I performed a larger SOM in analysis 2.  I chose this size because it was the smallest SOM that I was still able to do GO enrichment and identify gene clusters that show trends of up or down regulation through plant ages. Some clusters may not large enough to see any significant GO enrichment in the interesting clusters. 
+
+```{r}
+plot(som, type = "counts")
+```
+
+###Visualize by Cluster (Only interesting Clusters)
+
+```{r, echo = FALSE}
+##Bring the datasets back together for cluster specific visualizations
+plot.data <- cbind(data.val[,c(1,15:34)],som$unit.classif,som$distances)
+```
+
+I went through each cluster and tried to identify clusters that have the co-expression patterns we are interested in. The clusters that were the most interesting are clusters 2, 11, 16. You can find .csv tables of these clusters in the clusterTables folder.
+
+**CLUSTER 2**
+
+344 genes. Trend of down regulation in Leaf tissue through plant age. GO Enrichment of photosynthetic genes.  
+
+```{r}
+clusterVis_line(2) #down through age in leaf
+#What's in this cluster?
+y <- genesInClust(2, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis1.cluster2.csv")
+clusterGO(2)
+```
+
+**CLUSTER 11**
+
+147 genes.  Trend of up regulation of these genes in Leaf tissue through plant age. GO enrichment in defense response and cell wall.
+
+```{r}
+clusterVis_line(11)#up through time in leaf
+#what's in this cluster?
+y <- genesInClust(11, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis1.cluster11.csv")
+clusterGO(11)
+```
+
+**CLUSTER 16**
+
+141 Genes. Trending of up-regulated through age in both SAM and Leaf. Go enrichment doesn't mean anything to me. 
+```{r}
+clusterVis_line(16) #up through age in both SAM and leaves
+
+y <- genesInClust(16, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis1.cluster16.csv")
+clusterGO(16)
+```
+
+##Aim 2: Specific Genes
+
+Talking to Dan Chitwood: we need to look into specific genes.  Which clusters do they fall into?  From Dan via email:
+
+*The idea behind these experiments is a bit abstract, but let me try to convey it simply. 1) KNOXs are up in the leaf primordium in foliar shade. 2) As you would expect from this, leaves are statistically more complex in shade. 3) But shade also modulates the heteroblastic series. There is lots of classical literature on this. 4) Leaf complexity in tomato increases across the heteroblasty series already.
+
+What we didn't know is whether KNOX gene expression increases in the primordia of successive leaves across the heteroblastic series or not. If so, it suggests a mechanism by which shape, heteroblasty, and environmental response are integrated. If not, it suggests that increases in KNOX expression in shade affect leaf shape more than heteroblasty per se for shade, and that mechanisms modulating increases in leaf complexity across the series are not mediated through KNOX genes (a recent commentary Neelima and I wrote on a piece by Detlef suggests that actually TCPs/CUCs mediate heteroblasty more than KNOXs in Arabidopsis).
+
+For starters, how do the following Knotted-like genes behave in your dataset?
+
+Solyc04g077210.2.1
+Solyc05g005090.2.1
+Solyc01g100510.2.1
+Solyc11g069890.1.1
+Solyc02g081120.2.1
+
+Other genes to consider are the most significant in Dataset S2, which are those differentially expressed between constant sun and 28hr shade swapped leaf primordia.**
+
+Method:  
+
+I first extracted genes that are differentially expressed between constant sun and 28 hr shade swapped leaf primordia via Supplemntary Material v9_DatasetS2.xls. There are 645 genes in this list.  When I merged with the top 25% of genes, there were 212 that overlapped. 
+
+```{r, echo=FALSE }
+
+v9 <- read.csv("../data/DE_v9_DatasetS2.csv")
+
+
+#isolate the first column
+v9.ITAG <- as.data.frame(v9[,1])
+colnames(v9.ITAG)[1] <- "ITAG"
+
+plot.data2 <- plot.data
+colnames(plot.data2)[1]<-"ITAG"
+
+
+v9.cluster <- merge(v9.ITAG, plot.data2, by = "ITAG") 
+
+
+#Get only needed columns 
+v9.clusterIDs <- v9.cluster[,c(1,22,23)]
+colnames(v9.clusterIDs)[2]<-"cluster"
+
+str(v9.clusterIDs) #need cluster to be factor
+v9.clusterIDs$cluster <- as.factor(v9.clusterIDs$cluster)
+```
+
+I then visualized where if these 212 genes are over-represented in specific clusters. 
+
+```{r}
+summary(v9.clusterIDs$cluster)
+plot(v9.clusterIDs$cluster) 
+```
+
+Possible enriched in cluster #27, 22, and 23? Is there a way to statistically test this?
+
+**CLUSTER 27**
+
+There are 35 genes that are in cluster 27, but is this due to cluster size? What genes are in these clusters?
+
+The gene co-expression pattern found in cluster 27 is a spike after the first plant age with down regulation in trend following plant age.  I don't know what that gene pattern would mean.  Cluster 27 is enriched in three GO categories:1. Regulation of transcription, DNA templates, 2. sequence-specific DNA binding transcription factor activity, and 3. maintence of inflorescence meristem identity. If we ignore the first time point, it could show that the older the plant, the less it maintains meristematic idenity in SAM and early leaf tissue.  Remember "SAM" likely includes SAM and P0-P4.  Cluster 27 is a large cluster at 263 genes, but not enough to explain this much overlapp.  Again, is there a way to statistically test this? 
+
+```{r}
+clusterVis_line(27)
+y <- genesInClust(27, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis1.cluster27.csv")
+clusterGO(27)
+```
+
+**CLUSTER 22**
+The gene expression pattern is maybe up-regulation through plant age (?). GO enrichment of sequence-specific DNA binding transcription factor activity and transcription factor complex.  Not very clear though. 
+
+```{r}
+clusterVis_line(22)
+y <- genesInClust(22, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis1.cluster22.csv")
+clusterGO(22)
+```
+
+**Cluster 23**
+
+This cluster auctually shows a clear trend of up-regulation through plant age in the SAM. There is no GO enrichment. Only 188 genes.  Look through table output for individual genes that could be interesting?
+
+```{r}
+clusterVis_line(23)
+y <- genesInClust(23, plot.data, annotation)
+write.csv(y, "../clusterTables/analysis1.cluster23.csv")
+clusterGO(23)
+```
+
+The size of these clusters are about average, if not less. 
+
+```{r}
+plot(som, type = "counts")
+```
+
+###Knotted - like genes
+
+Isolated the genes and checked to see which clusters they belonged to. 
+
+```{r, echo = FALSE}
+#Knotted-like 
+ITAG <- c("Solyc04g077210.2.1","Solyc05g005090.2.1","Solyc01g100510.2.1", "Solyc11g069890.1.1", "Solyc02g081120.2.1")
+
+knottedGenes <- data.frame(ITAG)
+
+
+knot.cluster <- merge(knottedGenes, plot.data2, by = "ITAG") 
+
+#Get only needed columns 
+
+knot.clusterIDs <- knot.cluster[,c(1,22,23)]
+
+knot.clusterIDs #clusters 21, 23, 27
+```
+Three out of five of them are cluster 27.  
+```{r}
+clusterVis_line(27)
+```
+
+**Overall Results and Future Analysis**:
+
+There are several clusters that could be looked at more closely. These are in the `clusterTables` directory.  The clusters that were picked out for up or down regulation trends per tissue are clusters 2, 11 and 16.  The clusters that were identified for "enrichment" of v9.supplementary genes are 27, 22, and 23.  Cluster 27 not only had the most gene overlapp of the v9.supplementary genes, but also contained 3 out of 5 of the knotted- like genes. The expression pattern in this cluster is somewhat confusing though.
+
+The clustering may be confounded between SAM and leaf tissue being forced into same cluster. I think  looking at each of these tissues seperatley could be useful.  I performed this analysis but did not yield much though, for some reason the clustering was weird, even on a small SOM map, the genes all clustered together. See `dclcmSOM_analysis2_102814.Rmd` for more details. 
+
+Also, varying SOM sizes could yield more explicit gene expression patterns if larger SOM map or allow the ability to do GO-enrichment/promoter enrichment if smaller SOM. 
+
+For Larger SOM map, see Analysis4.  Basically it just makes smaller SOMs with more specific co-expression patterns.  I did the same analysis as I did here but with a larger SOM map.  I wasn't able to to GO enrichment on these clusters, but gives smaller gene lists, the interesting ones I printed out to the clusterTable folder.  
+
+
+
+
+
+
+
+

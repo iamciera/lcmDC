@@ -1,0 +1,52 @@
+"","ITAG","SGN_annotation","AGI","gene_name"
+"1","Solyc01g005350.2.1",NA,NA,NA
+"2","Solyc01g060160.1.1",NA,NA,NA
+"3","Solyc01g066010.1.1",NA,NA,NA
+"4","Solyc01g086660.2.1",NA,NA,NA
+"5","Solyc01g088160.2.1","Cytokinin oxidase/dehydrogenase (AHRD V1 **** C3VPM6_SOLTU); contains Interpro domain(s)  IPR015345  Cytokinin dehydrogenase 1, FAD and cytokinin binding ","AT3G63440","This gene used to be called AtCKX7. It encodes a protein whose sequence is similar to cytokinin oxidase/dehydrogenase, which catalyzes the degradation of cytokinins."
+"6","Solyc01g096510.2.1",NA,NA,NA
+"7","Solyc01g096560.1.1",NA,NA,NA
+"8","Solyc01g105840.2.1",NA,NA,NA
+"9","Solyc02g068660.1.1",NA,NA,NA
+"10","Solyc02g069040.2.1",NA,NA,NA
+"11","Solyc02g077610.2.1","NAC domain protein IPR003441 (AHRD V1 ***- B9H2Q1_POPTR); contains Interpro domain(s)  IPR003441  No apical meristem (NAM) protein ","AT4G28500","ANAC073 (Arabidopsis NAC domain containing protein 73); transcription factor; similar to ANAC010 (Arabidopsis NAC domain containing protein 10), transcription factor [Arabidopsis thaliana] (TAIR:AT1G28470.1); similar to no apical meristem (NAM) protein-like [Oryza sativa (japonica cultivar-group)] (GB:BAD73298.1); contains InterPro domain No apical meristem (NAM) protein; (InterPro:IPR003441)"
+"12","Solyc03g096770.1.1",NA,NA,NA
+"13","Solyc03g097930.2.1",NA,NA,NA
+"14","Solyc03g120120.2.1",NA,NA,NA
+"15","Solyc04g009480.1.1",NA,NA,NA
+"16","Solyc04g014660.1.1",NA,NA,NA
+"17","Solyc04g016040.1.1",NA,NA,NA
+"18","Solyc04g071920.1.1",NA,NA,NA
+"19","Solyc04g077810.1.1",NA,NA,NA
+"20","Solyc04g079210.2.1","Patatin-like protein 1 (AHRD V1 ***- Q9FZ09_TOBAC); contains Interpro domain(s)  IPR016035  Acyl transferase/acyl hydrolase/lysophospholipase ","AT4G37050","PLA V/PLP4 (Patatin-like protein 4); nutrient reservoir; similar to PLA IVA/PLP1, nutrient reservoir [Arabidopsis thaliana] (TAIR:AT4G37070.2); similar to patatin-like protein 1 [Nicotiana tabacum] (GB:AAF98368.1); contains InterPro domain Patatin; (InterPro:IPR002641)"
+"21","Solyc05g008210.2.1","Unknown Protein (AHRD V1)","AT2G01340","similar to unknown protein [Arabidopsis thaliana] (TAIR:AT1G71015.1); similar to unknown [Glycine max] (GB:AAG38147.1)"
+"22","Solyc05g052040.1.1",NA,NA,NA
+"23","Solyc06g008050.2.1","Monooxygenase (AHRD V1 **** D5ZV09_9ACTO); contains Interpro domain(s)  IPR000103  Pyridine nucleotide-disulphide oxidoreductase, class-II ","AT4G28720","flavin-containing monooxygenase family protein / FMO family protein; similar to SUPER1/YUCCA5 (SUPPRESSOR OF ER1), monooxygenase [Arabidopsis thaliana] (TAIR:AT5G43890.1); similar to flavin-containing monooxygenase family protein / FMO family protein [Arabidopsis thaliana] (TAIR:AT1G04180.1); similar to Pyridine nucleotide-disulphide oxidoreductase, class I; FAD-dependent pyridine nucleotide-disulphide oxidoreductase [Medicago truncatula] (GB:ABE89940.1); contains InterPro domain Flavin-containing monooxygenase FMO; (InterPro:IPR000960); contains InterPro domain Pyridine nucleotide-disulphide oxidoreductase, class-II; (InterPro:IPR000103); contains InterPro domain FAD-dependent pyridine nucleotide-disulphide oxidoreductase; (InterPro:IPR013027)"
+"24","Solyc06g069600.1.1",NA,NA,NA
+"25","Solyc06g071830.2.1","BTB/POZ domain-containing protein (AHRD V1 **-- D2KTV8_LOTJA); contains Interpro domain(s)  IPR000197  Zinc finger, TAZ-type ","AT5G63160","BT1 (BTB and TAZ domain protein 1); protein binding / transcription regulator; similar to BT2 (BTB and TAZ domain protein 2), protein binding / transcription regulator [Arabidopsis thaliana] (TAIR:AT3G48360.1); similar to hypothetical protein [Trifolium pratense] (GB:BAE71259.1); contains InterPro domain Zinc finger, TAZ-type; (InterPro:IPR000197); contains InterPro domain BTB; (InterPro:IPR000210); contains InterPro domain BTB/POZ; (InterPro:IPR013069)"
+"26","Solyc06g075660.2.1",NA,NA,NA
+"27","Solyc06g083560.2.1",NA,NA,NA
+"28","Solyc07g006710.1.1",NA,NA,NA
+"29","Solyc07g053750.1.1",NA,NA,NA
+"30","Solyc07g055470.2.1","Cytochrome P450","AT3G14690","putative cytochrome P450"
+"31","Solyc08g007130.2.1","Beta-amylase 8 (AHRD V1 **** D7MC27_ARALY); contains Interpro domain(s)  IPR001554  Glycoside hydrolase, family 14 ","AT4G17090","Encodes a beta-amylase targeted to the chloroplast. Transgenic BMY8 RNAi lines fail to accumulate maltose during cold shock suggesting that maltose accumulation coincides with BMY8 expression. Apart from maltose, the sugar content of the RNAi lines were similar to wildtype (glucose and sucrose unaffected)."
+"32","Solyc08g014430.2.1",NA,NA,NA
+"33","Solyc08g065450.1.1",NA,NA,NA
+"34","Solyc08g078290.1.1",NA,NA,NA
+"35","Solyc08g078460.2.1","Inositol 2-dehydrogenase like protein (AHRD V1 **-- O23580_ARATH); contains Interpro domain(s)  IPR016040  NAD(P)-binding domain ","AT4G17370","oxidoreductase family protein; similar to oxidoreductase family protein [Brassica oleracea] (GB:ABD65136.1); contains InterPro domain Oxidoreductase, C-terminal; (InterPro:IPR004104); contains InterPro domain Oxidoreductase, N-terminal; (InterPro:IPR000683)"
+"36","Solyc08g079780.1.1",NA,NA,NA
+"37","Solyc09g031520.1.1",NA,NA,NA
+"38","Solyc09g064160.2.1","Flavin monooxygenase-like protein (AHRD V1 **** D2IGV4_SOLLC); contains Interpro domain(s)  IPR000103  Pyridine nucleotide-disulphide oxidoreductase, class-II ","AT4G28720","flavin-containing monooxygenase family protein / FMO family protein; similar to SUPER1/YUCCA5 (SUPPRESSOR OF ER1), monooxygenase [Arabidopsis thaliana] (TAIR:AT5G43890.1); similar to flavin-containing monooxygenase family protein / FMO family protein [Arabidopsis thaliana] (TAIR:AT1G04180.1); similar to Pyridine nucleotide-disulphide oxidoreductase, class I; FAD-dependent pyridine nucleotide-disulphide oxidoreductase [Medicago truncatula] (GB:ABE89940.1); contains InterPro domain Flavin-containing monooxygenase FMO; (InterPro:IPR000960); contains InterPro domain Pyridine nucleotide-disulphide oxidoreductase, class-II; (InterPro:IPR000103); contains InterPro domain FAD-dependent pyridine nucleotide-disulphide oxidoreductase; (InterPro:IPR013027)"
+"39","Solyc09g082360.2.1",NA,NA,NA
+"40","Solyc09g091090.1.1","Monooxygenase (AHRD V1 **** D5ZV09_9ACTO); contains Interpro domain(s)  IPR000103  Pyridine nucleotide-disulphide oxidoreductase, class-II ","AT1G04610","flavin-containing monooxygenase / FMO (YUCCA3); similar to flavin-containing monooxygenase, putative / FMO, putative [Arabidopsis thaliana] (TAIR:AT2G33230.1); similar to Pyridine nucleotide-disulphide oxidoreductase, class I; FAD-dependent pyridine nucleotide-disulphide oxidoreductase [Medicago truncatula] (GB:ABE89940.1); contains InterPro domain Flavin-containing monooxygenase FMO; (InterPro:IPR000960); contains InterPro domain Pyridine nucleotide-disulphide oxidoreductase, class-II; (InterPro:IPR000103); contains InterPro domain FAD-dependent pyridine nucleotide-disulphide oxidoreductase; (InterPro:IPR013027)"
+"41","Solyc10g079570.1.1",NA,NA,NA
+"42","Solyc10g084170.1.1",NA,NA,NA
+"43","Solyc10g085620.1.1","Myb family transcription factor-like (AHRD V1 *--- Q6H510_ORYSJ); contains Interpro domain(s)  IPR006447  Myb-like DNA-binding region, SHAQKYF class ","AT5G18240","Encodes MYR1 (MYR1)."
+"44","Solyc11g007950.1.1",NA,NA,NA
+"45","Solyc11g042630.1.1",NA,NA,NA
+"46","Solyc11g073000.1.1",NA,NA,NA
+"47","Solyc12g087980.1.1",NA,NA,NA
+"48","Solyc12g088360.1.1","U-box domain-containing protein 4 (AHRD V1 **-- PUB4_ARATH); contains Interpro domain(s)  IPR011989  Armadillo-like helical ","AT3G01400","armadillo/beta-catenin repeat family protein; similar to armadillo/beta-catenin repeat family protein [Arabidopsis thaliana] (TAIR:AT5G58680.1); similar to Os07g0587500 [Oryza sativa (japonica cultivar-group)] (GB:NP_001060138.1); similar to Os03g0435300 [Oryza sativa (japonica cultivar-group)] (GB:NP_001050437.1); similar to IMP dehydrogenase/GMP reductase [Medicago truncatula] (GB:ABE88245.1); contains InterPro domain Armadillo; (InterPro:IPR000225); contains InterPro domain Armadillo-like helical; (InterPro:IPR011989)"
+"49","Solyc12g088510.1.1",NA,NA,NA
+"50","Solyc12g096870.1.1","UDP-glucosyltransferase 1 (AHRD V1 ***- C6ZRH7_CAPAN); contains Interpro domain(s)  IPR002213  UDP-glucuronosyl/UDP-glucosyltransferase ","AT4G15480","Encodes a protein that might have sinapic acid:UDP-glucose glucosyltransferase activity."
+"51","Solyc12g098610.1.1","Xyloglucan endotransglucosylase/hydrolase 8 (AHRD V1 ***- C0IRG7_ACTDE); contains Interpro domain(s)  IPR016455  Xyloglucan endotransglucosylase/hydrolase ","AT3G23730","xyloglucan:xyloglucosyl transferase, putative / xyloglucan endotransglycosylase, putative / endo-xyloglucan transferase, putative; Identical to Probable xyloglucan endotransglucosylase/hydrolase protein 16 precursor (EC 2.4.1.207) (At-XTH16) (XTH-16) (XTH16) [Arabidopsis Thaliana] (GB:Q8LG58;GB:Q9LK45); similar to XTR7 (XYLOGLUCAN ENDOTRANSGLYCOSYLASE 7), hydrolase, acting on glycosyl bonds [Arabidopsis thaliana] (TAIR:AT4G14130.1); similar to Brassinosteroid-regulated protein BRU1 precursor (GB:P35694); similar to xyloglucan endotransglycosylase 3 [Litchi chinensis] (GB:ABK30789.1); contains InterPro domain Beta-glucanase; (InterPro:IPR008264); contains InterPro domain Glycoside hydrolase, family 16, active site; (InterPro:IPR008263); contains InterPro domain Concanavalin A-like lectin/glucanase, subgroup; (InterPro:IPR013320); contains InterPro domain Concanavalin A-like lectin/glucanase; (InterPro:IPR008985); contains InterPro domain Glycoside hydrolase, family 16; (InterPro:IPR000757); contains InterPro domain Xyloglucan endo-transglycosylase, C-terminal; (InterPro:IPR010713)"
