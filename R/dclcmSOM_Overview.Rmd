@@ -71,7 +71,7 @@ clusterVis_region <- function(clustNum){
                              )
                           )
   
-  head(m.data)       
+
   p <- ggplot(m.data, aes(y=value, x=variable, fill = age))
   p + geom_point(alpha=0.5,position="jitter", size=1) + 
     geom_boxplot(alpha=0.70, outlier.size=0) +
@@ -93,7 +93,7 @@ annotation2<- read.delim ("../data/ITAG2.3_all_Arabidopsis_annotated.tsv")
 annotation <- merge(annotation1,annotation2, by = "ITAG")
 
 #Only Gene Name and ITAG
-names(annotation)
+
 annotation <- annotation[,c(1,2,3,5)]
 
 #fix with regex if ITAG does not include the last digits
@@ -154,13 +154,10 @@ clusterGO <- function(clustNum){
     pwf = nullp(genes,bias.data=pat$length)
   
     GO.wall = goseq(pwf,gene2cat = cate)
-    head(GO.wall, 30)
   
   #This is going to correct for multiple testing.  You can specify the p-value cut-off of GO categories you are interested.
   
     enriched.GO = GO.wall$category[p.adjust(GO.wall$over_represented_pvalue, method = "BH") < 0.05]
-  
-    enriched.GO
   
     my.GO <- as.character(enriched.GO)
     my.GO.table <- Term(my.GO)
@@ -200,8 +197,7 @@ ave <- subset(countData2[45:54])
 ave$sd <- apply(ave,1,function(d)sd(d))
 ave$average <- rowMeans(subset(ave[1:10]))
 ave$cv <- ave$sd / ave$average
-dim(ave)#check
-names(ave)#check
+
 
 #combine new columns to orginal
 countData <- cbind(countData, countData2[45:54]) 
@@ -271,7 +267,7 @@ plot(som, type = "codes")
 
 ###Count Plot - Large
 
-Pretty uniform clustering, with the exception of cluster 36 which has over 500, but most clusters have around 100-200.  I performed a larger SOM in analysis 2.  I chose this size because it was the smallest SOM that I was still able to do GO enrichment and identify gene clusters that show trends of up or down regulation through plant ages. Some clusters may not large enough to see any significant GO enrichment in the interesting clusters. 
+Pretty uniform clustering, with the exception of cluster 36 which has over 500, but most clusters have around 100-200.  I performed a larger SOM in analysis 2.  I chose this size because it was the smallest SOM that was still able to do GO enrichment and identify gene clusters that show trends of up or down regulation through plant ages. Some clusters may not be large enough to see any significant GO enrichment in the interesting clusters. 
 
 ```{r}
 plot(som, type = "counts")
