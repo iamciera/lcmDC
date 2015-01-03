@@ -28,13 +28,7 @@ head(countData)
 
 There are multiple instances of the same library because there were multiple fasta files that came from Berkeley and were processed seperatly.  I just need to combine them to get the true read count. 
 
-Get the sum of all columns with the same name.  This is a really horrible way to do this.  If I had more time I would 
-
-#make list of all unique column names
-#grep that name, grep("A2", names(countData))
-#add those columns together to a new name and data frame
-
-But I don't have a lot of time, at least it is reproducible. 
+Assign which columns belong to which libraries.
 
 ```{r}
 countData.2<- data.frame(countData$gene)
@@ -93,14 +87,14 @@ countData.2$F7 <- countData[,128] + countData[,129] + countData[,130]
 head(countData.2)
 ```
 
-Now I have to rename the  columns based on the library samples.
+Rename the  columns based on the library samples.
 
 ```{r}
 sampleNames <- read.csv("../data/librarySamples.csv")
 sampleNames
 ```
 
-I need to loop over names(countData.2), grep sampleNames[,1], returns row #, and replace with corresponding sampleNames[row,2]. 
+Loop over names(countData.2), grep sampleNames[,1], returns row #, and replace with corresponding sampleNames[row,2]. 
 
 ```{r}
 #make a new dataset 
@@ -115,11 +109,10 @@ for (x in names(countData.3)[2:47]) {
 
 #I double checked the first six. 
 ```
-
-Now I am ready for RNAseq and GO enrichment. Talk with Neelima and Brad about the samples and the work that needs to be done. 
+read out cleaned data
 
 ```{r}
-#read out cleaned data
+
 head(countData.3)
 
 countData.4 <- countData.3[,-1]
@@ -127,4 +120,4 @@ names(countData.4)
 rownames(countData.4) <- countData.3[,1]
 
 write.table(countData.4, "../data/countData4.txt")
-
+```
