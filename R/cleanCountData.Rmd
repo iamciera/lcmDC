@@ -1,4 +1,4 @@
-#Clean Up count data set
+#cleanCountData
 
 Read in data
 ```{r}
